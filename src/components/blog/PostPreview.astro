@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { HTMLTag, Polymorphic } from "astro/types";
+import FormattedDate from "@/components/FormattedDate.astro";
+
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+	post: CollectionEntry<"post">;
+	withDesc?: boolean;
+};
+
+const { as: Tag = "div", post, withDesc = false } = Astro.props;
+---
+
+<FormattedDate class="text-muted min-w-30 font-semibold" date={post.data.publishDate} />
+<Tag class="group relative">
+	{post.data.draft && <span class="text-red-500">(Draft) </span>}
+	<a class="cactus-link inline-flex items-center gap-2 transition-all duration-300 group-hover:text-accent-2" href={`/posts/${post.id}/`}>
+		<svg class="inline-block w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="currentColor">
+			<circle cx="12" cy="12" r="3"/>
+			<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
+		</svg>
+		{post.data.title}
+	</a>
+</Tag>
+{withDesc && <q class="line-clamp-3 italic text-muted group-hover:text-global-text transition-colors duration-300">{post.data.description}</q>}
