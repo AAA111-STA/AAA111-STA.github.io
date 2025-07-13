@@ -1,0 +1,89 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+import { siteConfig } from "@/site.config";
+
+const meta = {
+	title: "宇宙实验室",
+	description: "探索宇宙的奥秘，进行天文观测和实验",
+};
+---
+
+<PageLayout meta={{ title: meta.title, description: meta.description }}>
+	<div class="space-y-8">
+		<section class="animate">
+			<h1 class="text-4xl font-bold mb-4">🔬 宇宙实验室</h1>
+			<p class="text-lg opacity-80 mb-6">
+				这里是我们探索宇宙奥秘的实验空间，包含天文观测数据、模拟实验和交互式工具。
+			</p>
+		</section>
+
+		<section class="animate space-y-6">
+			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
+				<h2 class="text-2xl font-semibold mb-3">🌌 星系模拟器</h2>
+				<p class="opacity-80 mb-4">
+					使用 N-body 模拟技术，观察星系碰撞和演化过程。
+				</p>
+				<a href="/lab/galaxy-simulator" class="text-accent hover:underline">
+					启动模拟器 →
+				</a>
+			</div>
+
+			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
+				<h2 class="text-2xl font-semibold mb-3">🔭 行星观测记录</h2>
+				<p class="opacity-80 mb-4">
+					记录每次天文观测的数据，包括行星位置、大气条件和观测结果。
+				</p>
+				<a href="/lab/observations" class="text-accent hover:underline">
+					查看记录 →
+				</a>
+			</div>
+
+			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
+				<h2 class="text-2xl font-semibold mb-3">📊 天体物理数据分析</h2>
+				<p class="opacity-80 mb-4">
+					分析来自望远镜的光谱数据，研究恒星的化学组成和物理特性。
+				</p>
+				<a href="/lab/spectral-analysis" class="text-accent hover:underline">
+					开始分析 →
+				</a>
+			</div>
+
+			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
+				<h2 class="text-2xl font-semibold mb-3">🌠 流星雨预测</h2>
+				<p class="opacity-80 mb-4">
+					基于历史数据和轨道计算，预测即将到来的流星雨活动。
+				</p>
+				<a href="/lab/meteor-showers" class="text-accent hover:underline">
+					查看预测 →
+				</a>
+			</div>
+		</section>
+
+		<section class="animate">
+			<h2 class="text-2xl font-semibold mb-4">🧪 正在进行的实验</h2>
+			<ul class="space-y-3">
+				<li class="flex items-start gap-3">
+					<span class="text-accent">•</span>
+					<div>
+						<strong>月球摄影技术优化</strong>
+						<p class="text-sm opacity-70">使用不同曝光参数拍摄月球细节</p>
+					</div>
+				</li>
+				<li class="flex items-start gap-3">
+					<span class="text-accent">•</span>
+					<div>
+						<strong>木星大红斑变化监测</strong>
+						<p class="text-sm opacity-70">长期观测大红斑的尺寸和颜色变化</p>
+					</div>
+				</li>
+				<li class="flex items-start gap-3">
+					<span class="text-accent">•</span>
+					<div>
+						<strong>系外行星凌日探测</strong>
+						<p class="text-sm opacity-70">通过光度变化寻找潜在的系外行星</p>
+					</div>
+				</li>
+			</ul>
+		</section>
+	</div>
+</PageLayout>

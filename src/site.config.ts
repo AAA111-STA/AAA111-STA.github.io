@@ -47,6 +47,22 @@ export const menuLinks: { path: string; title: string }[] = [
 		path: "/notes/",
 		title: "星图笔记",
 	},
+	{
+		path: "/lab/",
+		title: "宇宙实验室",
+	},
+	{
+		path: "/gallery/",
+		title: "星空图库",
+	},
+	{
+		path: "/timeline/",
+		title: "时间轴",
+	},
+	{
+		path: "https://github.com/yourusername/astronomy-cosmos-blog",
+		title: "GitHub",
+	},
 ];
 
 // https://expressive-code.com/reference/configuration/

@@ -1,0 +1,97 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	title: "时间轴",
+	description: "星语宇宙的成长历程和重要里程碑",
+};
+
+const events = [
+	{
+		date: "2025-07",
+		title: "3D 宇宙背景效果上线",
+		description: "添加动态行星、宇航员、流星、卫星等立体元素，增强视觉体验",
+		type: "feature",
+	},
+	{
+		date: "2025-07",
+		title: "新增宇宙实验室和星空图库",
+		description: "扩展网站功能，提供更多互动内容和天文影像",
+		type: "feature",
+	},
+	{
+		date: "2025-06",
+		title: "深色宇宙主题完成",
+		description: "实现完整的深色主题系统，包含星空和星云动画效果",
+		type: "design",
+	},
+	{
+		date: "2025-06",
+		title: "项目初始化",
+		description: "基于 Astro 框架搭建天文博客网站，配置域名 universe.dev",
+		type: "milestone",
+	},
+	{
+		date: "2025-05",
+		title: "项目启动",
+		description: "确定网站定位：探索宇宙奥秘，分享天文知识",
+		type: "milestone",
+	},
+];
+
+const typeColors = {
+	feature: "bg-blue-500/20 text-blue-300",
+	design: "bg-purple-500/20 text-purple-300",
+	milestone: "bg-green-500/20 text-green-300",
+};
+
+const typeLabels = {
+	feature: "新功能",
+	design: "设计",
+	milestone: "里程碑",
+};
+---
+
+<PageLayout meta={{ title: meta.title, description: meta.description }}>
+	<div class="space-y-8">
+		<section class="animate">
+			<h1 class="text-4xl font-bold mb-4">⏰ 发展时间轴</h1>
+			<p class="text-lg opacity-80">
+				记录星语宇宙的每一个重要时刻和成长足迹。
+			</p>
+		</section>
+
+		<section class="animate">
+			<div class="relative border-l-2 border-accent/30 pl-8 space-y-8">
+				{events.map((event) => (
+					<div class="relative">
+						<div class="absolute -left-[2.15rem] top-1 w-4 h-4 rounded-full bg-accent border-4 border-global-bg"></div>
+						<div class="space-y-2">
+							<div class="flex items-center gap-3">
+								<time class="text-sm font-mono opacity-60">{event.date}</time>
+								<span class={`text-xs px-2 py-1 rounded-full ${typeColors[event.type as keyof typeof typeColors]}`}>
+									{typeLabels[event.type as keyof typeof typeLabels]}
+								</span>
+							</div>
+							<h3 class="text-xl font-semibold">{event.title}</h3>
+							<p class="opacity-80">{event.description}</p>
+						</div>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<section class="animate">
+			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20">
+				<h2 class="text-xl font-semibold mb-3">🚀 未来计划</h2>
+				<ul class="space-y-2 opacity-80">
+					<li>• 添加天文事件日历和提醒功能</li>
+					<li>• 集成实时星图和天体定位工具</li>
+					<li>• 开发移动端 APP 版本</li>
+					<li>• 建立天文爱好者社区论坛</li>
+					<li>• 与专业天文台建立数据共享</li>
+				</ul>
+			</div>
+		</section>
+	</div>
+</PageLayout>

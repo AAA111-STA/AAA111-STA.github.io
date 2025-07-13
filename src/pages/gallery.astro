@@ -1,0 +1,92 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	title: "星空图库",
+	description: "精选天文摄影作品和宇宙影像",
+};
+
+const images = [
+	{
+		title: "猎户座大星云",
+		description: "距离地球约 1,344 光年的恒星形成区域",
+		category: "星云",
+	},
+	{
+		title: "土星及其光环",
+		description: "卡西尼号探测器拍摄的土星壮丽景象",
+		category: "行星",
+	},
+	{
+		title: "仙女座星系",
+		description: "距离地球约 254 万光年的螺旋星系",
+		category: "星系",
+	},
+	{
+		title: "月球表面",
+		description: "高清月球环形山和月海细节",
+		category: "月球",
+	},
+	{
+		title: "英仙座流星雨",
+		description: "2024 年英仙座流星雨峰值夜晚",
+		category: "流星",
+	},
+	{
+		title: "木星大红斑",
+		description: "持续数百年的巨大风暴系统",
+		category: "行星",
+	},
+];
+---
+
+<PageLayout meta={{ title: meta.title, description: meta.description }}>
+	<div class="space-y-8">
+		<section class="animate">
+			<h1 class="text-4xl font-bold mb-4">🌌 星空图库</h1>
+			<p class="text-lg opacity-80">
+				收录来自世界各地天文爱好者和专业望远镜的精彩宇宙影像。
+			</p>
+		</section>
+
+		<section class="animate">
+			<div class="flex gap-2 mb-6 flex-wrap">
+				<button class="px-4 py-2 rounded-full bg-accent text-white">全部</button>
+				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">星云</button>
+				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">星系</button>
+				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">行星</button>
+				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">月球</button>
+				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">流星</button>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				{images.map((image) => (
+					<div class="group cursor-pointer">
+						<div class="relative aspect-video bg-accent/10 rounded-lg overflow-hidden border border-accent/20 hover:border-accent/50 transition-all duration-300">
+							<div class="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-blue-900/30 group-hover:opacity-80 transition-opacity"></div>
+							<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+								<span class="text-xs px-2 py-1 rounded-full bg-accent/80 text-white mb-2 inline-block">
+									{image.category}
+								</span>
+								<h3 class="text-lg font-semibold">{image.title}</h3>
+								<p class="text-sm opacity-80">{image.description}</p>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<section class="animate">
+			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20">
+				<h2 class="text-xl font-semibold mb-3">📸 投稿您的作品</h2>
+				<p class="opacity-80 mb-4">
+					如果您有精彩的天文摄影作品，欢迎投稿到我们的图库！
+				</p>
+				<a href="mailto:submit@universe.dev" class="text-accent hover:underline">
+					立即投稿 →
+				</a>
+			</div>
+		</section>
+	</div>
+</PageLayout>
