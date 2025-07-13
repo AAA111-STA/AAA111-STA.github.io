@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <title>星语宇宙</title>
+  <!-- Deep space background -->
+  <rect width="240" height="240" fill="#0a0e27"/>
+
+  <!-- Saturn-like planet -->
+  <circle cx="120" cy="120" r="50" fill="#7b68ee" opacity="0.9"/>
+
+  <!-- Ring -->
+  <ellipse cx="120" cy="120" rx="80" ry="20" fill="none" stroke="#9d8df1" stroke-width="5" opacity="0.7"/>
+
+  <!-- Stars scattered around -->
+  <circle cx="60" cy="60" r="2.5" fill="#fff" opacity="0.9"/>
+  <circle cx="180" cy="70" r="3" fill="#fff" opacity="0.95"/>
+  <circle cx="200" cy="140" r="2" fill="#fff" opacity="0.75"/>
+  <circle cx="50" cy="170" r="2.5" fill="#fff" opacity="0.85"/>
+  <circle cx="30" cy="120" r="1.5" fill="#fff" opacity="0.7"/>
+  <circle cx="210" cy="200" r="2" fill="#fff" opacity="0.8"/>
+
+  <!-- Orbital path hint -->
+  <path d="M 100 40 Q 140 60 160 100" stroke="#8b7de8" stroke-width="2" fill="none" opacity="0.5" stroke-dasharray="4,4"/>
+</svg>
