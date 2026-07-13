@@ -1,11 +1,42 @@
 ---
 import PageLayout from "@/layouts/Base.astro";
-import { siteConfig } from "@/site.config";
 
 const meta = {
 	title: "宇宙实验室",
 	description: "探索宇宙的奥秘，进行天文观测和实验",
 };
+
+// 四个交互式工具，均对应真实的子页面
+const tools = [
+	{
+		icon: "🪐",
+		title: "行星轨道模拟",
+		desc: "可视化太阳系八大行星的轨道运动，直观理解开普勒定律。",
+		href: "/lab/orbits",
+		cta: "启动模拟",
+	},
+	{
+		icon: "🌠",
+		title: "流星雨预测",
+		desc: "全年主要流星雨的活动时间、辐射点与观测指南。",
+		href: "/lab/meteor-showers",
+		cta: "查看预测",
+	},
+	{
+		icon: "⭐",
+		title: "恒星光谱分类",
+		desc: "了解哈佛光谱分类 OBAFGKM，以及恒星的温度与颜色特征。",
+		href: "/lab/spectra",
+		cta: "开始学习",
+	},
+	{
+		icon: "🌌",
+		title: "星系形态图鉴",
+		desc: "哈勃星系分类法，探索椭圆、旋涡、棒旋和不规则星系。",
+		href: "/lab/galaxies",
+		cta: "浏览图鉴",
+	},
+];
 ---
 
 <PageLayout meta={{ title: meta.title, description: meta.description }}>
@@ -13,50 +44,25 @@ const meta = {
 		<section class="animate">
 			<h1 class="text-4xl font-bold mb-4">🔬 宇宙实验室</h1>
 			<p class="text-lg opacity-80 mb-6">
-				这里是我们探索宇宙奥秘的实验空间，包含天文观测数据、模拟实验和交互式工具。
+				这里是我们探索宇宙奥秘的实验空间，包含天文数据、可视化模拟和交互式科普工具。
 			</p>
 		</section>
 
-		<section class="animate space-y-6">
-			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
-				<h2 class="text-2xl font-semibold mb-3">🌌 星系模拟器</h2>
-				<p class="opacity-80 mb-4">
-					使用 N-body 模拟技术，观察星系碰撞和演化过程。
-				</p>
-				<a href="/lab/galaxy-simulator" class="text-accent hover:underline">
-					启动模拟器 →
-				</a>
-			</div>
-
-			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
-				<h2 class="text-2xl font-semibold mb-3">🔭 行星观测记录</h2>
-				<p class="opacity-80 mb-4">
-					记录每次天文观测的数据，包括行星位置、大气条件和观测结果。
-				</p>
-				<a href="/lab/observations" class="text-accent hover:underline">
-					查看记录 →
-				</a>
-			</div>
-
-			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
-				<h2 class="text-2xl font-semibold mb-3">📊 天体物理数据分析</h2>
-				<p class="opacity-80 mb-4">
-					分析来自望远镜的光谱数据，研究恒星的化学组成和物理特性。
-				</p>
-				<a href="/lab/spectral-analysis" class="text-accent hover:underline">
-					开始分析 →
-				</a>
-			</div>
-
-			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/40 transition-all duration-300">
-				<h2 class="text-2xl font-semibold mb-3">🌠 流星雨预测</h2>
-				<p class="opacity-80 mb-4">
-					基于历史数据和轨道计算，预测即将到来的流星雨活动。
-				</p>
-				<a href="/lab/meteor-showers" class="text-accent hover:underline">
-					查看预测 →
-				</a>
-			</div>
+		<section class="animate grid gap-6 sm:grid-cols-2">
+			{
+				tools.map((tool) => (
+					<a
+						href={tool.href}
+						class="block p-6 rounded-lg bg-accent/10 border border-accent/20 hover:border-accent/50 hover:bg-accent/15 transition-all duration-300"
+					>
+						<h2 class="text-2xl font-semibold mb-3">
+							{tool.icon} {tool.title}
+						</h2>
+						<p class="opacity-80 mb-4 text-sm">{tool.desc}</p>
+						<span class="text-accent">{tool.cta} →</span>
+					</a>
+				))
+			}
 		</section>
 
 		<section class="animate">

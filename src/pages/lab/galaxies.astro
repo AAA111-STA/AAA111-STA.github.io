@@ -1,0 +1,114 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	title: "星系形态图鉴",
+	description: "哈勃星系分类法：椭圆星系、旋涡星系与不规则星系",
+};
+
+// 哈勃分类
+const hubbleTypes = [
+	{
+		symbol: "E0–E7",
+		name: "椭圆星系",
+		emoji: "🔵",
+		shape: "椭球形，从近似圆形（E0）到扁长（E7）",
+		feature: "几乎无冷气体和尘埃，恒星年老偏红，缺乏新恒星形成",
+		example: "M87（室女座巨椭圆星系，含超大质量黑洞）",
+	},
+	{
+		symbol: "S0",
+		name: "透镜状星系",
+		emoji: "🥏",
+		shape: "有中央核球和盘，但无明显旋臂",
+		feature: "介于椭圆与旋涡之间，盘中气体已大量耗尽",
+		example: "NGC 5866（草帽状透镜星系）",
+	},
+	{
+		symbol: "Sa–Sc",
+		name: "旋涡星系",
+		emoji: "🌀",
+		shape: "有中央核球 + 旋臂盘；a→c 核球渐小、旋臂渐开",
+		feature: "旋臂富含气体尘埃，是活跃的恒星形成区",
+		example: "M31（仙女座星系）、M51（涡状星系）",
+	},
+	{
+		symbol: "SBa–SBc",
+		name: "棒旋星系",
+		emoji: "🌌",
+		shape: "核心有恒星棒，旋臂从棒的两端延伸",
+		feature: "银河系即属此类；棒结构驱动气体向中心流动",
+		example: "银河系（SBbc）、NGC 1300",
+	},
+	{
+		symbol: "Irr",
+		name: "不规则星系",
+		emoji: "✨",
+		shape: "无对称结构，形态混乱",
+		feature: "常因引力扰动或并合产生，富气体、恒星形成旺盛",
+		example: "大、小麦哲伦云",
+	},
+];
+
+const facts = [
+	"哈勃的「音叉图」把星系按形态排列，但这并非演化序列——椭圆星系并不会「长出」旋臂。",
+	"可观测宇宙中估计有 2000 亿至 2 万亿个星系。",
+	"银河系直径约 10 万光年，包含 1000 亿至 4000 亿颗恒星。",
+	"仙女座星系正以约 110 km/s 接近银河系，约 45 亿年后两者将并合成一个巨椭圆星系（暱称「银河仙女」）。",
+];
+---
+
+<PageLayout meta={meta}>
+	<a href="/lab/" class="text-accent hover:underline text-sm">← 返回宇宙实验室</a>
+	<h1 class="title mt-4 mb-4">🌌 星系形态图鉴</h1>
+	<p class="mb-6 text-lg">
+		星系是由恒星、气体、尘埃和暗物质在引力作用下聚集而成的庞大系统。1926 年，天文学家埃德温·哈勃提出了沿用至今的星系形态分类法。
+	</p>
+
+	<h2 class="text-2xl font-semibold mb-4 text-accent">哈勃分类法</h2>
+	<div class="space-y-4 mb-10">
+		{
+			hubbleTypes.map((t) => (
+				<div class="rounded-lg border border-accent/20 bg-global-surface/50 p-5">
+					<div class="flex items-center gap-3 mb-2">
+						<span class="text-3xl">{t.emoji}</span>
+						<div>
+							<h3 class="text-xl font-semibold">{t.name}</h3>
+							<span class="text-xs text-muted font-mono">{t.symbol}</span>
+						</div>
+					</div>
+					<dl class="text-sm space-y-1">
+						<div class="flex gap-2">
+							<dt class="text-muted shrink-0 w-16">形态</dt>
+							<dd>{t.shape}</dd>
+						</div>
+						<div class="flex gap-2">
+							<dt class="text-muted shrink-0 w-16">特征</dt>
+							<dd>{t.feature}</dd>
+						</div>
+						<div class="flex gap-2">
+							<dt class="text-muted shrink-0 w-16">代表</dt>
+							<dd>{t.example}</dd>
+						</div>
+					</dl>
+				</div>
+			))
+		}
+	</div>
+
+	<h2 class="text-2xl font-semibold mb-4 text-accent">星系冷知识</h2>
+	<ul class="space-y-3 mb-6">
+		{
+			facts.map((f) => (
+				<li class="rounded-lg border border-accent/20 bg-global-surface/40 p-4 text-sm flex gap-3">
+					<span class="text-accent">✦</span>
+					<span>{f}</span>
+				</li>
+			))
+		}
+	</ul>
+
+	<div class="rounded-lg bg-accent/10 border border-accent/20 p-5 text-sm text-muted">
+		提示：想直观感受旋涡星系的旋臂结构，可在晴朗无月的夜晚用双筒望远镜观测仙女座星系（M31），它是肉眼可见的最遥远天体之一。
+	</div>
+</PageLayout>

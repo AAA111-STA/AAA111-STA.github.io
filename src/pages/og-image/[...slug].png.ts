@@ -36,14 +36,21 @@ export async function GET(context: APIContext) {
 	// check the og-image cache
 	let pngBuffer = readCache(title, pubDate);
 	if (!pngBuffer) {
-		console.info(`Generating new OG image for: ${title}`);
-		const postDate = getFormattedDate(pubDate, {
-			month: "long",
-			weekday: "long",
-		});
-		const svg = await satori(ogMarkup(title, postDate), ogOptions);
-		pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
-		writeToCache(title, pubDate, pngBuffer);
+		try {
+			console.info(`Generating new OG image for: ${title}`);
+			const postDate = getFormattedDate(pubDate, {
+				month: "long",
+				weekday: "long",
+			});
+			const svg = await satori(ogMarkup(title, postDate), ogOptions);
+			pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
+			writeToCache(title, pubDate, pngBuffer);
+		} catch (err) {
+			console.warn(`OG image failed for "${title}", using fallback:`, (err as Error).message);
+			pngBuffer = await sharp({
+				create: { width: 1200, height: 630, channels: 4, background: { r: 10, g: 14, b: 39, alpha: 1 } },
+			}).png().toBuffer();
+		}
 	}
 
 	return new Response(new Uint8Array(pngBuffer), {

@@ -1,0 +1,145 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	title: "恒星光谱分类",
+	description: "哈佛光谱分类法 OBAFGKM，恒星的温度、颜色与特征",
+};
+
+// 哈佛光谱分类
+const spectralClasses = [
+	{
+		type: "O",
+		color: "蓝色",
+		temp: "≥ 33,000 K",
+		mass: "≥ 16 M☉",
+		desc: "极热的蓝色巨星，电离氦线强，寿命短，极为稀有（约占 0.00003%）。",
+		example: "参宿一（猎户座 ζ）",
+		swatch: "#9bb0ff",
+	},
+	{
+		type: "B",
+		color: "蓝白色",
+		temp: "10,000–33,000 K",
+		mass: "2.1–16 M☉",
+		desc: "中性氦线与氢线突出，多见于年轻星团，如昴星团中的亮星。",
+		example: "参宿七（猎户座 β）",
+		swatch: "#aabfff",
+	},
+	{
+		type: "A",
+		color: "白色",
+		temp: "7,500–10,000 K",
+		mass: "1.4–2.1 M☉",
+		desc: "氢巴尔末线最强，金属线开始出现，是夜空中许多亮星的类型。",
+		example: "天狼星（大犬座 α）",
+		swatch: "#cad7ff",
+	},
+	{
+		type: "F",
+		color: "黄白色",
+		temp: "6,000–7,500 K",
+		mass: "1.04–1.4 M☉",
+		desc: "氢线减弱，电离金属线增强，光谱中金属特征日益明显。",
+		example: "南河三（小犬座 α）",
+		swatch: "#f8f7ff",
+	},
+	{
+		type: "G",
+		color: "黄色",
+		temp: "5,200–6,000 K",
+		mass: "0.8–1.04 M☉",
+		desc: "太阳所属类型，中性金属线强，钙的 H、K 线显著。",
+		example: "太阳",
+		swatch: "#fff4ea",
+	},
+	{
+		type: "K",
+		color: "橙色",
+		temp: "3,700–5,200 K",
+		mass: "0.45–0.8 M☉",
+		desc: "较冷的橙色恒星，金属线主导，出现分子谱带，寿命长。",
+		example: "大角星（牧夫座 α）",
+		swatch: "#ffd2a1",
+	},
+	{
+		type: "M",
+		color: "红色",
+		temp: "2,400–3,700 K",
+		mass: "0.08–0.45 M☉",
+		desc: "最冷、最常见的恒星（约占 76%），氧化钛分子带强，包括红矮星与红巨星。",
+		example: "参宿四（猎户座 α）",
+		swatch: "#ffcc6f",
+	},
+];
+
+// 记忆口诀
+const mnemonic = "Oh, Be A Fine Girl/Guy, Kiss Me";
+---
+
+<PageLayout meta={meta}>
+	<h1 class="title mb-2">⭐ 恒星光谱分类</h1>
+	<p class="mb-8 text-muted">哈佛光谱分类法：OBAFGKM 从热到冷的恒星序列</p>
+
+	<div class="prose prose-sm prose-cactus max-w-none">
+		<h2>什么是光谱分类？</h2>
+		<p>
+			天文学家通过分析恒星的光谱吸收线，将恒星按表面温度从高到低排列，形成
+			<strong>O、B、A、F、G、K、M</strong> 七个主要类别（另有更冷的 L、T、Y 褐矮星）。
+			温度决定了恒星的颜色：最热的 O 型呈蓝色，最冷的 M 型呈红色。每个类别再细分为
+			0–9 十个子级，例如太阳属于 <strong>G2V</strong> 型。
+		</p>
+		<p class="not-prose rounded-lg border border-accent/20 bg-global-surface/50 p-4">
+			💡 <strong>经典记忆口诀：</strong>「{mnemonic}」——每个单词首字母对应一个光谱型。
+		</p>
+	</div>
+
+	<!-- 光谱色带 -->
+	<h2 class="mt-10 mb-4 text-xl font-semibold">温度色谱（热 → 冷）</h2>
+	<div class="mb-4 flex h-8 w-full overflow-hidden rounded-lg border border-accent/20">
+		{
+			spectralClasses.map((s) => (
+				<div
+					class="flex flex-1 items-center justify-center text-xs font-bold text-black/70"
+					style={`background:${s.swatch}`}
+				>
+					{s.type}
+				</div>
+			))
+		}
+	</div>
+
+	<!-- 分类详表 -->
+	<h2 class="mt-10 mb-4 text-xl font-semibold">七大光谱类型详解</h2>
+	<div class="space-y-4">
+		{
+			spectralClasses.map((s) => (
+				<div class="flex gap-4 rounded-lg border border-accent/20 bg-global-surface/50 p-5">
+					<div
+						class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-2xl font-bold text-black/70"
+						style={`background:${s.swatch};box-shadow:0 0 20px ${s.swatch}80`}
+					>
+						{s.type}
+					</div>
+					<div class="flex-1">
+						<div class="mb-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+							<h3 class="text-lg font-semibold">{s.type} 型 · {s.color}</h3>
+							<span class="text-sm text-accent">{s.temp}</span>
+							<span class="text-xs text-muted">质量 {s.mass}</span>
+						</div>
+						<p class="mb-1 text-sm">{s.desc}</p>
+						<p class="text-xs text-muted">代表恒星：{s.example}</p>
+					</div>
+				</div>
+			))
+		}
+	</div>
+
+	<div class="mt-10 rounded-lg border border-accent/20 bg-accent/10 p-6">
+		<h2 class="mb-2 text-lg font-semibold">🌡️ 冷知识</h2>
+		<p class="text-sm">
+			光谱型后面的罗马数字表示<strong>光度级</strong>：I 是超巨星，III 是巨星，V 是主序星（矮星）。
+			所以太阳的完整分类 <strong>G2V</strong> 意为「中等偏热的黄色主序星」。
+		</p>
+	</div>
+</PageLayout>

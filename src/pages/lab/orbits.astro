@@ -1,0 +1,132 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	title: "行星轨道模拟",
+	description: "太阳系行星轨道数据与开普勒定律",
+};
+
+// 八大行星轨道数据（半长轴、公转周期、偏心率、轨道速度）
+const planets = [
+	{ name: "水星", au: 0.39, period: "88 天", ecc: 0.206, speed: 47.4, color: "#b5a48f" },
+	{ name: "金星", au: 0.72, period: "225 天", ecc: 0.007, speed: 35.0, color: "#e6c583" },
+	{ name: "地球", au: 1.00, period: "365.25 天", ecc: 0.017, speed: 29.8, color: "#4a97dc" },
+	{ name: "火星", au: 1.52, period: "687 天", ecc: 0.093, speed: 24.1, color: "#c0562f" },
+	{ name: "木星", au: 5.20, period: "11.86 年", ecc: 0.048, speed: 13.1, color: "#c99d6b" },
+	{ name: "土星", au: 9.54, period: "29.46 年", ecc: 0.054, speed: 9.7, color: "#e5cf9c" },
+	{ name: "天王星", au: 19.19, period: "84.01 年", ecc: 0.047, speed: 6.8, color: "#6fc4c0" },
+	{ name: "海王星", au: 30.07, period: "164.8 年", ecc: 0.009, speed: 5.4, color: "#3f5fb5" },
+];
+---
+
+<PageLayout meta={meta}>
+	<h1 class="title mb-6">🪐 行星轨道模拟</h1>
+	<p class="mb-8 text-lg">
+		太阳系八大行星沿椭圆轨道绕太阳公转。下面的动画按真实轨道半径的对数比例排布，
+		并以近似的相对速度运行，帮助你直观理解「离太阳越远、公转越慢」这一开普勒第三定律的结果。
+	</p>
+
+	<!-- 轨道动画 -->
+	<div class="orbit-stage mb-10">
+		<div class="sun"></div>
+		{planets.map((p, i) => (
+			<div
+				class="orbit"
+				style={`width:${60 + i * 42}px;height:${60 + i * 42}px;animation-duration:${6 + i * 4}s`}
+			>
+				<div class="planet" style={`background:${p.color};box-shadow:0 0 8px ${p.color}`}>
+					<span class="planet-label">{p.name}</span>
+				</div>
+			</div>
+		))}
+	</div>
+
+	<!-- 数据表 -->
+	<h2 class="title text-accent mb-4 text-xl">轨道数据一览</h2>
+	<div class="overflow-x-auto mb-10">
+		<table class="w-full text-sm border-collapse">
+			<thead>
+				<tr class="border-b border-accent/30 text-left">
+					<th class="py-2 pr-4">行星</th>
+					<th class="py-2 pr-4">轨道半径 (AU)</th>
+					<th class="py-2 pr-4">公转周期</th>
+					<th class="py-2 pr-4">轨道偏心率</th>
+					<th class="py-2 pr-4">平均轨道速度 (km/s)</th>
+				</tr>
+			</thead>
+			<tbody>
+				{planets.map((p) => (
+					<tr class="border-b border-accent/10">
+						<td class="py-2 pr-4 font-semibold">
+							<span class="inline-block w-3 h-3 rounded-full mr-2 align-middle" style={`background:${p.color}`}></span>
+							{p.name}
+						</td>
+						<td class="py-2 pr-4">{p.au}</td>
+						<td class="py-2 pr-4">{p.period}</td>
+						<td class="py-2 pr-4">{p.ecc}</td>
+						<td class="py-2 pr-4">{p.speed}</td>
+					</tr>
+				))}
+			</tbody>
+		</table>
+	</div>
+
+	<h2 class="title text-accent mb-4 text-xl">开普勒三定律</h2>
+	<div class="prose prose-sm prose-cactus max-w-none mb-8">
+		<ol>
+			<li><strong>轨道定律</strong>：行星沿椭圆轨道运行，太阳位于椭圆的一个焦点上。</li>
+			<li><strong>面积定律</strong>：行星与太阳的连线在相等时间内扫过相等的面积，因此近日点运动快、远日点运动慢。</li>
+			<li><strong>周期定律</strong>：行星公转周期的平方与轨道半长轴的立方成正比（T² ∝ a³）。这正是外围行星周期急剧变长的原因。</li>
+		</ol>
+	</div>
+
+	<a href="/lab/" class="text-accent hover:underline">← 返回宇宙实验室</a>
+</PageLayout>
+
+<style>
+	.orbit-stage {
+		position: relative;
+		width: 100%;
+		height: 440px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid rgba(120,160,235,.2);
+		border-radius: 12px;
+		background: radial-gradient(ellipse at center, rgba(20,24,52,.6), rgba(8,11,26,.6));
+		overflow: hidden;
+	}
+	.sun {
+		position: absolute;
+		width: 34px; height: 34px; border-radius: 50%;
+		background: radial-gradient(circle at 40% 35%, #fff6c0, #ffcf40 45%, #ff9500 80%);
+		box-shadow: 0 0 30px rgba(255,180,40,.8), 0 0 60px rgba(255,140,0,.4);
+		z-index: 2;
+	}
+	.orbit {
+		position: absolute;
+		border: 1px solid rgba(150,180,255,.14);
+		border-radius: 50%;
+		animation: spin linear infinite;
+	}
+	.planet {
+		position: absolute;
+		top: 50%; left: -5px;
+		width: 10px; height: 10px; border-radius: 50%;
+		transform: translateY(-50%);
+	}
+	.planet-label {
+		position: absolute;
+		left: 14px; top: 50%; transform: translateY(-50%);
+		font-size: 10px; white-space: nowrap; color: rgba(220,230,255,.85);
+	}
+	@keyframes spin { to { transform: rotate(360deg); } }
+
+	@media (max-width: 768px) {
+		.orbit-stage { height: 340px; }
+		.planet-label { display: none; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.orbit { animation: none; }
+	}
+</style>

@@ -5,23 +5,23 @@ import { menuLinks } from "@/site.config";
 import { siteConfig } from "../../site.config";
 ---
 
-<header class="group relative mb-28 flex items-center sm:ps-18" id="main-header">
-	<div class="flex sm:flex-col">
+<header class="relative mb-28" id="main-header">
+	<!-- 顶部栏：Logo + 搜索 + 主题切换 -->
+	<div class="flex items-center justify-between sm:ps-18">
 		<a
 			aria-current={Astro.url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center sm:relative sm:inline-block sm:grayscale sm:hover:filter-none"
+			class="inline-flex items-center gap-3"
 			href="/"
 		>
 			<svg
 				aria-hidden="true"
-				class="me-3 h-10 w-6 sm:absolute sm:-start-18 sm:me-0 sm:h-20 sm:w-12 transition-transform duration-300 hover:scale-110"
+				class="h-12 w-7 sm:absolute sm:left-0 sm:top-0 sm:h-16 sm:w-10 transition-transform duration-300 hover:scale-110"
 				fill="none"
 				focusable="false"
 				viewBox="0 0 240 240"
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<title>星语宇宙 Logo</title>
-				<!-- 主星球 -->
 				<circle cx="120" cy="120" r="50" fill="url(#planetGradient)" opacity="0.95"/>
 				<defs>
 					<radialGradient id="planetGradient" cx="40%" cy="40%">
@@ -29,11 +29,8 @@ import { siteConfig } from "../../site.config";
 						<stop offset="100%" style="stop-color:#6b5dd3;stop-opacity:1" />
 					</radialGradient>
 				</defs>
-				<!-- 光环 -->
 				<ellipse cx="120" cy="120" rx="80" ry="20" fill="none" stroke="#9d8df1" stroke-width="4" opacity="0.7"/>
-				<!-- 内环装饰 -->
 				<ellipse cx="120" cy="120" rx="65" ry="15" fill="none" stroke="#b8abf5" stroke-width="2" opacity="0.5"/>
-				<!-- 星星装饰 -->
 				<circle cx="60" cy="60" r="2.5" fill="#fff" opacity="0.9">
 					<animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
 				</circle>
@@ -46,89 +43,32 @@ import { siteConfig } from "../../site.config";
 				<circle cx="50" cy="170" r="2" fill="#fff" opacity="0.85">
 					<animate attributeName="opacity" values="0.5;1;0.5" dur="3.5s" repeatCount="indefinite"/>
 				</circle>
-				<!-- 轨道线 -->
 				<path d="M 100 40 Q 140 60 160 100" stroke="#8b7de8" stroke-width="1.5" fill="none" opacity="0.4" stroke-dasharray="3,3"/>
 			</svg>
-			<span class="text-xl font-bold sm:text-2xl">{siteConfig.title}</span>
+			<span class="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-purple-300 via-violet-400 to-blue-300 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(157,141,241,0.5)]">{siteConfig.title}</span>
 		</a>
-		<nav
-			aria-label="Main"
-			class="bg-global-bg absolute -inset-x-4 top-12 hidden flex-col divide-y px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ms-4 sm:mt-1 sm:flex sm:flex-row sm:divide-x sm:divide-y-0 sm:bg-transparent sm:p-0"
-			id="navigation-menu"
-		>
-			{
-				menuLinks.map((link) => (
-					<a
-						aria-current={Astro.url.pathname === link.path ? "page" : false}
-						class="text-accent px-2 py-4 font-semibold sm:px-4 sm:py-0 sm:underline-offset-2 sm:hover:underline transition-all duration-300 hover:text-accent-2 hover:scale-105"
-						href={link.path}
-					>
-						{link.title}
-					</a>
-				))
-			}
-		</nav>
+		<div class="flex items-center gap-x-2">
+			<Search />
+			<ThemeToggle />
+		</div>
 	</div>
-	<Search />
-	<ThemeToggle />
-	<mobile-button>
-		<button
-			aria-expanded="false"
-			aria-haspopup="menu"
-			class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
-			id="toggle-navigation-menu"
-			type="button"
-		>
-			<span class="sr-only">Open main menu</span>
-			<svg
-				aria-hidden="true"
-				class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
-				fill="none"
-				focusable="false"
-				id="line-svg"
-				stroke="currentColor"
-				stroke-width="1.5"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"
-				></path>
-			</svg>
-			<svg
-				aria-hidden="true"
-				class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
-				class="text-accent"
-				fill="none"
-				focusable="false"
-				id="cross-svg"
-				stroke="currentColor"
-				stroke-width="1.5"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
-			</svg>
-		</button>
-	</mobile-button>
-</header>
 
-<script>
-	import { toggleClass } from "@/utils/domElement";
-
-	class MobileNavBtn extends HTMLElement {
-		#menuOpen: boolean = false;
-
-		connectedCallback() {
-			const headerEl = document.getElementById("main-header")!;
-			const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
-
-			mobileButtonEl?.addEventListener("click", () => {
-				if (headerEl) toggleClass(headerEl, "menu-open");
-				this.#menuOpen = !this.#menuOpen;
-				mobileButtonEl.setAttribute("aria-expanded", this.#menuOpen.toString());
-			});
+	<!-- 导航栏：全部横向排列 -->
+	<nav
+		aria-label="主菜单"
+		class="flex flex-row flex-wrap gap-x-1 gap-y-1 mt-4 sm:ps-18"
+		id="navigation-menu"
+	>
+		{
+			menuLinks.map((link) => (
+				<a
+					aria-current={Astro.url.pathname === link.path ? "page" : false}
+					class="text-accent px-3 py-2 font-semibold text-sm sm:text-base rounded-lg transition-all duration-300 hover:text-accent-2 hover:scale-105 hover:bg-accent/10"
+					href={link.path}
+				>
+					{link.title}
+				</a>
+			))
 		}
-	}
-
-	customElements.define("mobile-button", MobileNavBtn);
-</script>
+	</nav>
+</header>

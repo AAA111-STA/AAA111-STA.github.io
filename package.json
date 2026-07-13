@@ -6,8 +6,8 @@
 	"private": false,
 	"scripts": {
 		"postinstall": "npm rebuild sharp --force",
-		"dev": "astro dev",
-		"start": "astro dev",
+		"dev": "astro dev --port 3000",
+		"start": "astro dev --port 3000",
 		"build": "astro build",
 		"postbuild": "pagefind --site dist",
 		"preview": "astro preview",

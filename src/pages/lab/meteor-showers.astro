@@ -1,0 +1,154 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	title: "流星雨预测",
+	description: "全年主要流星雨活动时间、辐射点与观测指南",
+};
+
+// 主要流星雨年历数据（ZHR = 每小时天顶流量）
+const showers = [
+	{
+		name: "象限仪座流星雨",
+		peak: "1 月 3–4 日",
+		zhr: 120,
+		parent: "小行星 2003 EH1",
+		radiant: "牧夫座",
+		speed: 41,
+		note: "峰值极窄，仅数小时，北半球高纬度地区观测条件最佳。",
+	},
+	{
+		name: "天琴座流星雨",
+		peak: "4 月 22–23 日",
+		zhr: 18,
+		parent: "撒切尔彗星 (C/1861 G1)",
+		radiant: "天琴座",
+		speed: 49,
+		note: "历史最悠久的流星雨记录，偶有爆发年份。",
+	},
+	{
+		name: "宝瓶座 η 流星雨",
+		peak: "5 月 5–6 日",
+		zhr: 50,
+		parent: "哈雷彗星",
+		radiant: "宝瓶座",
+		speed: 66,
+		note: "源自哈雷彗星，速度快、常见持久余迹，南半球更佳。",
+	},
+	{
+		name: "英仙座流星雨",
+		peak: "8 月 12–13 日",
+		zhr: 100,
+		parent: "斯威夫特-塔特尔彗星",
+		radiant: "英仙座",
+		speed: 59,
+		note: "北半球夏季最受欢迎的流星雨，火流星比例高。",
+	},
+	{
+		name: "猎户座流星雨",
+		peak: "10 月 21–22 日",
+		zhr: 20,
+		parent: "哈雷彗星",
+		radiant: "猎户座",
+		speed: 66,
+		note: "哈雷彗星的另一支尘埃流，流星明亮而快速。",
+	},
+	{
+		name: "狮子座流星雨",
+		peak: "11 月 17–18 日",
+		zhr: 15,
+		parent: "坦普尔-塔特尔彗星",
+		radiant: "狮子座",
+		speed: 71,
+		note: "约每 33 年出现一次壮观的流星暴，平常年份较弱。",
+	},
+	{
+		name: "双子座流星雨",
+		peak: "12 月 13–14 日",
+		zhr: 150,
+		parent: "小行星 3200 Phaethon",
+		radiant: "双子座",
+		speed: 35,
+		note: "年度最强流星雨，流量大、颜色丰富，源自罕见的岩质母天体。",
+	},
+];
+
+const tips = [
+	"选择远离城市灯光的黑暗观测点，海拔越高、光污染越低越好。",
+	"峰值日期前后 2–3 天都有可观流量，避开满月的夜晚。",
+	"给眼睛 20–30 分钟适应黑暗，不要看手机屏幕。",
+	"平躺仰望天顶附近，视野开阔即可，无需望远镜。",
+	"ZHR 是理想条件下的理论值，实际肉眼可见数量通常更少。",
+];
+---
+
+<PageLayout meta={meta}>
+	<h1 class="title mb-4">🌠 流星雨预测</h1>
+	<p class="mb-8 text-lg">
+		流星雨是地球穿过彗星或小行星遗留尘埃带时产生的现象。下表列出全年主要流星雨的活动时间、辐射点与强度，帮助你规划观测。
+	</p>
+
+	<h2 class="text-2xl font-semibold mb-4 text-accent">年度流星雨日历</h2>
+	<div class="overflow-x-auto mb-10">
+		<table class="w-full text-sm border-collapse">
+			<thead>
+				<tr class="border-b-2 border-accent/30 text-left">
+					<th class="py-2 pr-4">流星雨</th>
+					<th class="py-2 pr-4">峰值日期</th>
+					<th class="py-2 pr-4">ZHR</th>
+					<th class="py-2 pr-4">速度<br />(km/s)</th>
+					<th class="py-2 pr-4">辐射点</th>
+					<th class="py-2">母天体</th>
+				</tr>
+			</thead>
+			<tbody>
+				{
+					showers.map((s) => (
+						<tr class="border-b border-accent/10 align-top">
+							<td class="py-3 pr-4 font-semibold">{s.name}</td>
+							<td class="py-3 pr-4 whitespace-nowrap">{s.peak}</td>
+							<td class="py-3 pr-4">{s.zhr}</td>
+							<td class="py-3 pr-4">{s.speed}</td>
+							<td class="py-3 pr-4 whitespace-nowrap">{s.radiant}</td>
+							<td class="py-3 text-muted">{s.parent}</td>
+						</tr>
+					))
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<h2 class="text-2xl font-semibold mb-4 text-accent">重点流星雨详解</h2>
+	<div class="grid gap-4 sm:grid-cols-2 mb-10">
+		{
+			showers
+				.filter((s) => s.zhr >= 100)
+				.map((s) => (
+					<div class="rounded-lg border border-accent/20 bg-global-surface/50 p-5">
+						<div class="flex items-baseline justify-between mb-2">
+							<h3 class="text-lg font-semibold">{s.name}</h3>
+							<span class="text-accent text-sm">ZHR ≈ {s.zhr}</span>
+						</div>
+						<p class="text-sm text-muted mb-2">峰值：{s.peak}</p>
+						<p class="text-sm">{s.note}</p>
+					</div>
+				))
+		}
+	</div>
+
+	<h2 class="text-2xl font-semibold mb-4 text-accent">观测小贴士</h2>
+	<ul class="space-y-2 mb-6">
+		{
+			tips.map((t) => (
+				<li class="flex gap-2 text-sm">
+					<span class="text-accent">✦</span>
+					<span>{t}</span>
+				</li>
+			))
+		}
+	</ul>
+
+	<p class="text-sm text-muted">
+		← 返回 <a href="/lab/" class="text-accent hover:underline">宇宙实验室</a>
+	</p>
+</PageLayout>

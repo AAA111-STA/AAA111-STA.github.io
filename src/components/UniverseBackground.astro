@@ -1,538 +1,716 @@
 ---
-// 宇宙背景组件 - 包含星星、星云、行星、宇航员
+// 宇宙背景组件 - 多层3D深空场景
 ---
 
-<div class="universe-background">
-	<!-- 星空层 -->
-	<div class="stars-layer"></div>
-
-	<!-- 星云层 -->
-	<div class="nebula-layer"></div>
-
-	<!-- 行星层 -->
-	<div class="planets-layer">
-		<div class="planet planet-1"></div>
-		<div class="planet planet-2"></div>
-		<div class="planet planet-3"></div>
+<div class="universe-bg">
+	<div class="ubg-stars"></div>
+	<div class="ubg-nebula"></div>
+	<div class="ubg-planets">
+		<div class="p p1"></div>
+		<div class="p p2"></div>
+		<div class="p p3"></div>
+		<div class="p p4"></div>
+		<div class="p p5"></div>
+		<div class="p p6"></div>
+		<div class="p p7"></div>
 	</div>
 
-	<!-- 宇航员层 - 增加数量 -->
-	<div class="astronaut-layer">
-		<div class="astronaut astronaut-1"></div>
-		<div class="astronaut astronaut-2"></div>
+	<!-- 左上角 国际空间站 (ISS) -->
+	<div class="ubg-iss" aria-hidden="true">
+		<div class="iss-model">
+			<!-- 中央桁架横梁 -->
+			<div class="iss-truss"></div>
+			<!-- 太阳能板：左右各两片大板 -->
+			<div class="iss-panel pL1"></div>
+			<div class="iss-panel pL2"></div>
+			<div class="iss-panel pR1"></div>
+			<div class="iss-panel pR2"></div>
+			<!-- 散热器（浅色小板） -->
+			<div class="iss-radiator rTop"></div>
+			<div class="iss-radiator rBot"></div>
+			<!-- 中央增压舱段 -->
+			<div class="iss-core"></div>
+			<!-- 前端对接舱 + 天线 -->
+			<div class="iss-dock"></div>
+			<div class="iss-antenna"></div>
+		</div>
 	</div>
 
-	<!-- 流星层 -->
-	<div class="meteor-layer">
-		<div class="meteor meteor-1"></div>
-		<div class="meteor meteor-2"></div>
-		<div class="meteor meteor-3"></div>
+	<!-- 3D 宇航员 -->
+	<div class="ubg-astronauts">
+		<div class="a3d a3d-1">
+			<div class="a3d-model">
+				<div class="a3d-helmet"><div class="a3d-visor"></div></div>
+				<div class="a3d-neck"></div>
+				<div class="a3d-torso"><div class="a3d-panel"></div></div>
+				<div class="a3d-belt"></div>
+				<div class="a3d-pack"></div>
+				<div class="a3d-armL"><div class="a3d-glove"></div></div>
+				<div class="a3d-armR"><div class="a3d-glove"></div></div>
+				<div class="a3d-legL"><div class="a3d-boot"></div></div>
+				<div class="a3d-legR"><div class="a3d-boot"></div></div>
+				<div class="a3d-hose"></div>
+			</div>
+		</div>
+		<div class="a3d a3d-2">
+			<div class="a3d-model">
+				<div class="a3d-helmet"><div class="a3d-visor"></div></div>
+				<div class="a3d-neck"></div>
+				<div class="a3d-torso"><div class="a3d-panel"></div></div>
+				<div class="a3d-belt"></div>
+				<div class="a3d-pack"></div>
+				<div class="a3d-armL"><div class="a3d-glove"></div></div>
+				<div class="a3d-armR"><div class="a3d-glove"></div></div>
+				<div class="a3d-legL"><div class="a3d-boot"></div></div>
+				<div class="a3d-legR"><div class="a3d-boot"></div></div>
+				<div class="a3d-hose"></div>
+			</div>
+		</div>
 	</div>
 
-	<!-- 卫星层 -->
-	<div class="satellite-layer">
-		<div class="satellite"></div>
-	</div>
+	<!-- 流星雨（canvas 逐帧绘制，满屏落下） -->
+	<canvas class="ubg-meteors" aria-hidden="true"></canvas>
 
-	<!-- 飞船层 -->
-	<div class="spaceship-layer">
-		<div class="spaceship"></div>
-	</div>
 </div>
 
 <style>
-	.universe-background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		overflow: hidden;
-		pointer-events: none;
+	.universe-bg {
+		position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+		z-index: -1; overflow: hidden; pointer-events: none;
+		perspective: 1800px; transform-style: preserve-3d;
+		background: radial-gradient(ellipse at 50% 50%, #0d1025 0%, #080b1a 50%, #050810 100%);
 	}
 
-	/* 星空层 - 多层闪烁星星 */
-	.stars-layer {
-		position: absolute;
-		width: 100%;
-		height: 100%;
+	/* ====== 星空 ====== */
+	.ubg-stars {
+		position: absolute; width: 100%; height: 100%;
 		background-image:
-			radial-gradient(2px 2px at 20% 30%, white, transparent),
-			radial-gradient(2px 2px at 60% 70%, rgba(255, 255, 255, 0.8), transparent),
-			radial-gradient(1px 1px at 50% 50%, white, transparent),
-			radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.6), transparent),
-			radial-gradient(2px 2px at 90% 60%, white, transparent),
-			radial-gradient(1px 1px at 33% 80%, rgba(255, 255, 255, 0.7), transparent),
-			radial-gradient(1px 1px at 15% 90%, white, transparent),
-			radial-gradient(1px 1px at 40% 20%, rgba(255, 255, 255, 0.9), transparent),
-			radial-gradient(2px 2px at 75% 45%, white, transparent),
-			radial-gradient(1px 1px at 25% 65%, rgba(255, 255, 255, 0.8), transparent);
-		background-size: 200% 200%;
-		background-position:
-			0% 0%, 40% 60%, 130% 270%, 70% 100%,
-			100% 100%, 50% 100%, 80% 30%, 20% 80%,
-			60% 20%, 90% 90%;
+			url('/starry-sky.jpg'),
+			radial-gradient(2px 2px at 15% 20%, #fff0, transparent),
+			radial-gradient(1.5px 1.5px at 35% 45%, #fffc, transparent),
+			radial-gradient(2px 2px at 55% 15%, #fffe, transparent),
+			radial-gradient(1px 1px at 70% 35%, #fffd, transparent),
+			radial-gradient(2.5px 2.5px at 85% 55%, #ffff, transparent),
+			radial-gradient(1px 1px at 25% 75%, #fffc, transparent),
+			radial-gradient(2px 2px at 60% 80%, #fff0, transparent),
+			radial-gradient(1.5px 1.5px at 40% 90%, #fffd, transparent),
+			radial-gradient(2px 2px at 90% 10%, #fffe, transparent),
+			radial-gradient(1px 1px at 10% 50%, #fffb, transparent),
+			radial-gradient(2px 2px at 75% 95%, #ffff, transparent),
+			radial-gradient(1.5px 1.5px at 50% 60%, #fffc, transparent);
+		background-size: cover, 300px 300px, 250px 250px, 350px 350px, 200px 200px, 280px 280px, 320px 320px, 260px 260px, 300px 300px, 240px 240px, 280px 280px, 350px 350px, 220px 220px;
+		background-position: center, 0% 0%, 30% 20%, 60% 10%, 80% 30%, 10% 60%, 50% 70%, 70% 80%, 20% 85%, 90% 5%, 15% 40%, 80% 90%, 45% 50%;
+		background-repeat: no-repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat;
 		animation: twinkle 4s ease-in-out infinite alternate;
+		transform: translateZ(-250px) scale(1.2);
 	}
+	@keyframes twinkle { 0%,100%{opacity:.7} 50%{opacity:1} }
 
-	@keyframes twinkle {
-		0%, 100% {
-			opacity: 0.5;
-		}
-		50% {
-			opacity: 0.9;
-		}
-	}
-
-	/* 星云层 - 彩色渐变云雾 */
-	.nebula-layer {
-		position: absolute;
-		width: 100%;
-		height: 100%;
+	/* ====== 星云 ====== */
+	.ubg-nebula {
+		position: absolute; width: 100%; height: 100%;
 		background:
-			radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
-			radial-gradient(ellipse at 80% 70%, rgba(75, 0, 130, 0.12) 0%, transparent 50%),
-			radial-gradient(ellipse at 50% 50%, rgba(25, 25, 112, 0.1) 0%, transparent 60%),
-			radial-gradient(ellipse at 70% 20%, rgba(72, 61, 139, 0.08) 0%, transparent 45%);
-		animation: nebulaDrift 20s ease-in-out infinite alternate;
+			radial-gradient(ellipse at 25% 30%, rgba(70,60,180,0.18) 0%, transparent 55%),
+			radial-gradient(ellipse at 75% 65%, rgba(30,20,100,0.15) 0%, transparent 50%),
+			radial-gradient(ellipse at 50% 45%, rgba(40,80,140,0.1) 0%, transparent 60%),
+			radial-gradient(ellipse at 65% 15%, rgba(100,60,160,0.08) 0%, transparent 45%);
+		animation: nebDrift 18s ease-in-out infinite alternate;
+		transform: translateZ(-120px) scale(1.1);
+	}
+	@keyframes nebDrift {
+		0%{transform:translate(0,0) scale(1)} 50%{transform:translate(25px,-20px) scale(1.06)}
+		100%{transform:translate(-15px,15px) scale(.97)}
 	}
 
-	@keyframes nebulaDrift {
-		0% {
-			transform: translate(0, 0) scale(1);
-			opacity: 0.6;
-		}
-		50% {
-			transform: translate(20px, -15px) scale(1.05);
-			opacity: 0.8;
-		}
-		100% {
-			transform: translate(-10px, 10px) scale(0.98);
-			opacity: 0.7;
-		}
-	}
+	/* ====== 行星 ====== */
+	.ubg-planets { position: absolute; width: 100%; height: 100%; transform: translateZ(40px); }
+	.p { position: absolute; border-radius: 50%; transform-style: preserve-3d; }
+	/* -- 木星：不等宽大气带 + 极区压暗 + 大红斑 -- */
+	.p1 { width:130px; height:130px; top:12%; right:8%;
+		background:
+			/* 高光 */
+			radial-gradient(circle at 30% 25%, rgba(255,255,255,.3), transparent 40%),
+			/* 极区压暗，使条纹包裹球面 */
+			radial-gradient(150% 90% at 50% 50%, transparent 55%, rgba(60,35,15,.55) 100%),
+			/* 不等宽的横向大气带（赤道亮带、深褐带、温带） */
+			linear-gradient(180deg,
+				#c9a06a 0%, #bb9058 5%,
+				#e7d3ac 10%, #efe0bd 15%,
+				#a9793f 20%, #9c6b34 25%,
+				#dcc190 30%, #e9d4a6 37%,
+				#b07f45 43%, #c99f68 49%,
+				#f0e2be 54%, #e3cd9e 60%,
+				#9a6a34 66%, #ac7c46 72%,
+				#dcc292 79%, #cdaa73 86%,
+				#b28850 92%, #a4773f 100%);
+		box-shadow:inset -30px -25px 55px rgba(0,0,0,.62), inset 14px 10px 28px rgba(255,238,200,.24), 0 0 55px rgba(244,164,96,.45);
+		animation:pf1 22s ease-in-out infinite; }
+	.p1::after { content:''; position:absolute; width:34px; height:20px; top:57%; left:22%;
+		background:
+			radial-gradient(ellipse at 42% 38%, #e0684a, #c13c26 42%, #8f2415 70%, #661a0e);
+		border-radius:50%; transform:rotate(-8deg);
+		box-shadow:inset -3px -2px 8px rgba(0,0,0,.5), inset 2px 2px 5px rgba(255,180,140,.4), 0 0 6px rgba(180,50,30,.4); }
 
-	/* 行星层 - 增强 3D 效果 */
-	.planets-layer {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		perspective: 1000px;
-	}
+	/* -- 海王星：深蓝冰巨星，深浅蓝带 + 极区压暗 -- */
+	.p2 { width:95px; height:95px; bottom:18%; left:12%;
+		background:
+			radial-gradient(circle at 34% 28%, rgba(255,255,255,.32), transparent 38%),
+			radial-gradient(150% 90% at 50% 50%, transparent 55%, rgba(10,20,55,.6) 100%),
+			linear-gradient(180deg,
+				#3f63bd 0%, #38559f 12%,
+				#5679d4 22%, #6b8ce0 28%,
+				#33509a 38%, #2c4890 46%,
+				#4c72cc 55%, #5a80d6 62%,
+				#2d4a92 72%, #274285 82%,
+				#3a5cb0 92%, #2c4a90 100%),
+			radial-gradient(circle at 50% 50%, #3f5fb5, #22407e 72%, #16295a);
+		box-shadow:inset -22px -20px 40px rgba(0,0,0,.52), inset 10px 8px 22px rgba(180,205,255,.2), 0 0 45px rgba(65,105,225,.5);
+		animation:pf2 19s ease-in-out infinite; }
+	.p2::after { content:''; position:absolute; width:20px; height:11px; top:40%; left:52%;
+		background:radial-gradient(ellipse at 45% 40%, rgba(40,60,120,.9), rgba(25,40,90,.6) 70%, transparent);
+		border-radius:50%; transform:rotate(-6deg); }
 
-	.planet {
-		position: absolute;
-		border-radius: 50%;
-		opacity: 0.75;
-		filter: blur(0.5px);
+	/* -- 天王星：青绿冰巨星 + 竖直光环 -- */
+	.p3 { width:75px; height:75px; top:55%; right:22%;
+		background:
+			radial-gradient(circle at 38% 30%, rgba(255,255,255,.32), transparent 42%),
+			radial-gradient(circle at 50% 50%, #a8e6e0, #6fc4c0 48%, #3d8f8d 78%, #256463);
+		box-shadow:inset -15px -15px 30px rgba(0,0,0,.45), 0 0 35px rgba(120,210,205,.5);
+		animation:pf3 25s ease-in-out infinite; }
+	.p3::after { content:''; position:absolute; top:50%; left:50%; width:24%; height:150%;
+		background:linear-gradient(to right, transparent, rgba(150,230,225,.55) 40%, rgba(200,245,240,.7) 50%, rgba(150,230,225,.55) 60%, transparent);
+		border-radius:50%; transform:translate(-50%,-50%) rotateY(78deg) rotate(12deg);
+		box-shadow:0 0 14px rgba(150,230,225,.4); }
+
+	/* -- 土星：不等宽沙金带 + 极区压暗 + 显著光环系统 -- */
+	.p4 { width:115px; height:115px; top:72%; right:12%;
+		background:
+			radial-gradient(circle at 32% 26%, rgba(255,255,255,.3), transparent 40%),
+			radial-gradient(150% 90% at 50% 50%, transparent 56%, rgba(80,55,20,.5) 100%),
+			linear-gradient(180deg,
+				#e2c896 0%, #d8bb82 8%,
+				#f2e4c0 15%, #f6eccd 22%,
+				#cda877 28%, #c79f68 34%,
+				#ead7a8 42%, #f0e0ba 50%,
+				#cfae78 58%, #dcc08c 66%,
+				#f1e3bf 74%, #e6d2a2 82%,
+				#cba873 90%, #d7ba86 100%);
+		box-shadow:inset -22px -20px 40px rgba(0,0,0,.52), inset 10px 8px 24px rgba(255,246,214,.22), 0 0 48px rgba(214,180,120,.45);
+		animation:pf4 24s ease-in-out infinite; }
+	.p4::before { content:''; position:absolute; top:50%; left:50%; width:230%; height:64%;
+		background:
+			radial-gradient(ellipse at 50% 50%,
+				transparent 0%, transparent 30%,
+				rgba(200,180,140,.15) 32%, rgba(225,205,165,.75) 38%,
+				rgba(180,152,108,.85) 45%, rgba(150,124,86,.3) 49%,
+				transparent 50%, transparent 100%);
+		border-radius:50%; transform:translate(-50%,-50%) rotateX(74deg);
+		z-index:-1; }
+	.p4::after { content:''; position:absolute; top:50%; left:50%; width:230%; height:64%;
+		background:
+			radial-gradient(ellipse at 50% 50%,
+				transparent 0%, transparent 50%,
+				rgba(180,152,108,.85) 51%, rgba(225,205,165,.75) 55%,
+				rgba(200,180,140,.4) 61%, transparent 64%, transparent 100%);
+		border-radius:50%; transform:translate(-50%,-50%) rotateX(74deg);
+		clip-path:inset(50% 0 0 0); }
+
+	/* -- 地球：海洋 + 陆地 + 云 -- */
+	.p5 { width:80px; height:80px; top:8%; left:22%;
+		background:
+			radial-gradient(circle at 32% 26%, rgba(255,255,255,.4), transparent 34%),
+			radial-gradient(ellipse at 62% 58%, #3f8c3a 0%, #2f6b2f 14%, transparent 32%),
+			radial-gradient(ellipse at 34% 68%, #46953f 0%, #2f6b2f 12%, transparent 26%),
+			radial-gradient(ellipse at 70% 30%, #3f8c3a 0%, transparent 20%),
+			radial-gradient(circle at 46% 46%, #4a97dc, #2b6cb0 56%, #17436f 82%);
+		box-shadow:inset -16px -15px 28px rgba(0,0,0,.5), 0 0 38px rgba(70,150,220,.55);
+		animation:pf5 30s ease-in-out infinite; }
+	.p5::after { content:''; position:absolute; inset:0; border-radius:50%;
+		background:
+			radial-gradient(ellipse at 25% 40%, rgba(255,255,255,.5) 0 6%, transparent 12%),
+			radial-gradient(ellipse at 68% 62%, rgba(255,255,255,.45) 0 5%, transparent 11%),
+			radial-gradient(ellipse at 50% 20%, rgba(255,255,255,.4) 0 4%, transparent 9%);
+		opacity:.7; }
+
+	/* -- 月球：灰白 + 环形山 -- */
+	.p6 { width:50px; height:50px; top:42%; left:6%;
+		background:
+			radial-gradient(circle at 62% 34%, rgba(0,0,0,.16) 0 3px, transparent 4px),
+			radial-gradient(circle at 40% 60%, rgba(0,0,0,.18) 0 5px, transparent 6px),
+			radial-gradient(circle at 70% 66%, rgba(0,0,0,.13) 0 2.5px, transparent 3.5px),
+			radial-gradient(circle at 30% 40%, rgba(0,0,0,.12) 0 3px, transparent 4px),
+			radial-gradient(circle at 36% 30%, rgba(255,255,255,.35), transparent 42%),
+			radial-gradient(circle at 47% 47%, #e0e0e0, #b6b6b6 52%, #8a8a8a 80%);
+		box-shadow:inset -10px -8px 18px rgba(0,0,0,.5), 0 0 22px rgba(200,200,200,.4);
+		animation:pf6 16s ease-in-out infinite; }
+
+	/* -- 火星：铁锈色 + 极冠 + 陨坑 -- */
+	.p7 { width:60px; height:60px; bottom:8%; right:50%;
+		background:
+			radial-gradient(circle at 50% 12%, rgba(255,255,255,.85) 0 4%, rgba(255,255,255,.35) 7%, transparent 12%),
+			radial-gradient(circle at 58% 40%, rgba(0,0,0,.12) 0 4px, transparent 5px),
+			radial-gradient(circle at 35% 55%, rgba(90,30,15,.4) 0 6px, transparent 8px),
+			radial-gradient(circle at 36% 30%, rgba(255,220,180,.35), transparent 40%),
+			radial-gradient(circle at 48% 50%, #e07b53, #c0562f 50%, #8b3a1e 78%, #5c2413);
+		box-shadow:inset -12px -10px 22px rgba(0,0,0,.5), 0 0 28px rgba(210,90,50,.45);
+		animation:pf7 27s ease-in-out infinite; }
+
+	@keyframes pf1 { 0%,100%{transform:translateY(0)translateX(0)} 50%{transform:translateY(-35px)translateX(22px)} }
+	@keyframes pf2 { 0%,100%{transform:translateY(0)translateX(0)} 50%{transform:translateY(28px)translateX(-18px)} }
+	@keyframes pf3 { 0%,100%{transform:translateY(0)translateX(0)} 50%{transform:translateY(-22px)translateX(-28px)} }
+	@keyframes pf4 { 0%,100%{transform:translateY(0)translateX(0)} 50%{transform:translateY(-18px)translateX(-22px)} }
+	@keyframes pf5 { 0%,100%{transform:translateY(0)translateX(0)} 50%{transform:translateY(-28px)translateX(12px)} }
+	@keyframes pf6 { 0%,100%{transform:translateY(0)translateX(0)} 50%{transform:translateY(22px)translateX(-16px)} }
+	@keyframes pf7 { 0%,100%{transform:translateY(0)translateX(0)} 50%{transform:translateY(-12px)translateX(28px)} }
+
+	/* ====== 国际空间站（左上角，纯CSS，放大版） ====== */
+	.ubg-iss {
+		position: absolute; top: 5%; left: 3%;
+		width: 420px; height: 210px;
+		transform: translateZ(90px);
+		animation: issFloat 30s ease-in-out infinite;
+		filter: drop-shadow(0 0 22px rgba(150,190,255,.4)) drop-shadow(0 14px 32px rgba(0,0,0,.55));
+	}
+	.iss-model {
+		position: absolute; inset: 0;
+		transform: rotate(-16deg);
 		transform-style: preserve-3d;
-		transition: transform 0.3s ease;
 	}
 
-	.planet:hover {
-		transform: scale(1.1) translateZ(20px);
-		opacity: 0.9;
+	/* 中央桁架（横梁，贯穿整体） */
+	.iss-truss {
+		position: absolute; top: 50%; left: 50%;
+		width: 320px; height: 14px; transform: translate(-50%,-50%);
+		background: linear-gradient(180deg, #d6dae0, #a4abb4 45%, #767c85);
+		border-radius: 4px;
+		box-shadow: inset 0 -3px 5px rgba(0,0,0,.35), 0 2px 5px rgba(0,0,0,.4);
+		z-index: 5;
+	}
+	.iss-truss::before { /* 桁架网格纹理 */
+		content:''; position:absolute; inset:0; border-radius:4px;
+		background: repeating-linear-gradient(90deg, transparent 0 11px, rgba(0,0,0,.2) 11px 13px);
 	}
 
-	/* 火星 - 带地形纹理 */
-	.planet-1 {
-		width: 120px;
-		height: 120px;
-		top: 15%;
-		right: 10%;
+	/* 中央增压舱段（居中圆柱模块组） */
+	.iss-core {
+		position: absolute; top: 50%; left: 50%;
+		width: 104px; height: 40px; transform: translate(-50%,-50%);
+		background: linear-gradient(180deg, #f1f3f6, #d2d6dc 40%, #e2e6eb 60%, #b3b8c0);
+		border-radius: 20px;
+		box-shadow: inset -6px -4px 13px rgba(0,0,0,.28), inset 4px 3px 9px rgba(255,255,255,.55), 0 3px 11px rgba(0,0,0,.4);
+		z-index: 8;
+	}
+	.iss-core::before { /* 舱段分节环 */
+		content:''; position:absolute; inset:0; border-radius:20px;
+		background: repeating-linear-gradient(90deg, transparent 0 22px, rgba(0,0,0,.14) 22px 25px);
+	}
+	.iss-core::after { /* 侧向舷窗排 */
+		content:''; position:absolute; top:50%; left:50%; width:70px; height:7px;
+		transform:translate(-50%,-50%);
+		background: repeating-linear-gradient(90deg, rgba(90,150,220,.75) 0 5px, transparent 5px 13px);
+		border-radius:4px;
+	}
+
+	/* 前端对接舱 */
+	.iss-dock {
+		position: absolute; top: 50%; left: 50%;
+		width: 26px; height: 24px; transform: translate(-50%,-50%) translateX(64px);
+		background: radial-gradient(circle at 40% 35%, #fdfdfd, #c6cbd2 60%, #8f959e);
+		border-radius: 6px 10px 10px 6px;
+		box-shadow: 0 0 8px rgba(180,210,255,.5), inset -2px 0 5px rgba(0,0,0,.3);
+		z-index: 9;
+	}
+	/* 前端天线/桁架端 */
+	.iss-antenna {
+		position: absolute; top: 50%; left: 50%;
+		width: 34px; height: 3px; transform: translate(-50%,-50%) translateX(96px);
+		background: linear-gradient(90deg, #b8bdc5, #7e848d);
+		z-index: 4;
+	}
+	.iss-antenna::after {
+		content:''; position:absolute; right:-6px; top:50%; width:11px; height:11px;
+		transform:translateY(-50%);
+		background:radial-gradient(circle, #e8ebef, #9aa1aa);
+		border-radius:50%; box-shadow:0 0 6px rgba(180,210,255,.5);
+	}
+
+	/* 太阳能板：左右各两片大板（金色，经典 ISS 配色） */
+	.iss-panel {
+		position: absolute; top: 50%;
+		width: 88px; height: 132px; transform: translateY(-50%);
 		background:
-			radial-gradient(circle at 25% 35%, rgba(139, 69, 19, 0.3) 0%, transparent 15%),
-			radial-gradient(circle at 60% 50%, rgba(101, 67, 33, 0.4) 0%, transparent 20%),
-			radial-gradient(circle at 40% 70%, rgba(160, 82, 45, 0.3) 0%, transparent 18%),
-			radial-gradient(circle at 30% 30%, #f4a460, #d2691e 40%, #8b4513 65%, #2c1810);
-		box-shadow:
-			inset -25px -25px 50px rgba(0, 0, 0, 0.6),
-			inset 15px 15px 30px rgba(244, 164, 96, 0.2),
-			0 0 50px rgba(244, 164, 96, 0.4),
-			0 0 80px rgba(244, 164, 96, 0.2);
-		animation: planetFloat1 30s ease-in-out infinite, planetRotate1 60s linear infinite;
+			linear-gradient(90deg, rgba(0,0,0,.28) 0 1px, transparent 1px 100%) 0 0/22px 100%,
+			linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 100%) 0 0/100% 16px,
+			linear-gradient(135deg, #c79a3e, #9c7527 42%, #b98f37 60%, #6e4f18);
+		border: 1px solid rgba(210,175,90,.6);
+		box-shadow: inset 0 0 16px rgba(255,215,120,.3), 0 0 12px rgba(180,140,50,.3);
+		z-index: 3;
+	}
+	.iss-panel.pL1 { right: 50%; margin-right: 70px; }
+	.iss-panel.pL2 { right: 50%; margin-right: 166px; }
+	.iss-panel.pR1 { left: 50%; margin-left: 70px; }
+	.iss-panel.pR2 { left: 50%; margin-left: 166px; }
+	/* 板与桁架之间的连接杆 */
+	.iss-panel::after {
+		content:''; position:absolute; top:50%; width:20px; height:4px;
+		background:#9aa1aa; transform:translateY(-50%);
+	}
+	.iss-panel.pL1::after, .iss-panel.pL2::after { right:-20px; }
+	.iss-panel.pR1::after, .iss-panel.pR2::after { left:-20px; }
+
+	/* 散热器（浅色小板，位于核心舱上下方） */
+	.iss-radiator {
+		position: absolute; left: 50%;
+		width: 46px; height: 30px;
+		background: linear-gradient(180deg, #e4e8ed, #b8bdc5);
+		border: 1px solid rgba(150,156,165,.6);
+		box-shadow: inset 0 0 8px rgba(0,0,0,.2);
+		z-index: 2;
+	}
+	.iss-radiator.rTop { top: 50%; transform: translate(-50%,-50%) translateY(-46px); }
+	.iss-radiator.rBot { top: 50%; transform: translate(-50%,-50%) translateY(46px); }
+	.iss-radiator::before {
+		content:''; position:absolute; inset:0;
+		background: repeating-linear-gradient(0deg, transparent 0 4px, rgba(0,0,0,.16) 4px 5px);
 	}
 
-	/* 蓝色行星 - 带云层 */
-	.planet-2 {
-		width: 90px;
-		height: 90px;
-		bottom: 20%;
-		left: 15%;
-		background:
-			radial-gradient(ellipse at 30% 40%, rgba(255, 255, 255, 0.4) 0%, transparent 25%),
-			radial-gradient(ellipse at 70% 60%, rgba(255, 255, 255, 0.3) 0%, transparent 30%),
-			radial-gradient(circle at 35% 35%, #87ceeb, #4682b4 45%, #4169e1 60%, #191970);
-		box-shadow:
-			inset -20px -20px 40px rgba(0, 0, 0, 0.5),
-			inset 12px 12px 25px rgba(135, 206, 235, 0.3),
-			0 0 40px rgba(65, 105, 225, 0.5),
-			0 0 70px rgba(65, 105, 225, 0.3);
-		animation: planetFloat2 25s ease-in-out infinite, planetRotate2 50s linear infinite;
+	@keyframes issFloat {
+		0%,100%{ transform: translateZ(90px) translate(0,0); }
+		50%{ transform: translateZ(90px) translate(22px,15px); }
 	}
 
-	/* 紫色星球 - 带光环提示 */
-	.planet-3 {
-		width: 70px;
-		height: 70px;
-		top: 60%;
-		right: 25%;
-		background:
-			radial-gradient(circle at 45% 35%, rgba(221, 160, 221, 0.3) 0%, transparent 20%),
-			radial-gradient(circle at 40% 30%, #dda0dd, #ba55d3 50%, #8b008b 65%, #4b0082);
-		box-shadow:
-			inset -15px -15px 30px rgba(0, 0, 0, 0.5),
-			inset 10px 10px 20px rgba(221, 160, 221, 0.2),
-			0 0 35px rgba(221, 160, 221, 0.4),
-			0 0 60px rgba(138, 43, 226, 0.3);
-		animation: planetFloat3 35s ease-in-out infinite, planetRotate3 55s linear infinite;
+	/* ====== 纯CSS 3D宇航员模型 ====== */
+	.ubg-astronauts {
+		position: absolute; width: 100%; height: 100%;
+		transform: translateZ(130px); perspective: 800px;
+	}
+	.a3d {
+		position: absolute; width: 100px; height: 200px;
+		transform-style: preserve-3d;
+		filter: drop-shadow(0 0 30px rgba(150,190,255,.5)) drop-shadow(0 15px 40px rgba(0,0,0,.5));
+	}
+	.a3d-1 { top: 38%; left: 4%; animation: aFloat1 30s ease-in-out infinite; }
+	.a3d-2 { top: 65%; right: 6%; animation: aFloat2 34s ease-in-out infinite; }
+
+	.a3d-model {
+		width: 100%; height: 100%; position: relative;
+		transform-style: preserve-3d;
+		animation: aSpin3D 16s ease-in-out infinite;
+	}
+	@keyframes aSpin3D {
+		0%,100%{transform:rotateY(-12deg) rotateX(3deg)}
+		25%{transform:rotateY(10deg) rotateX(-4deg)}
+		50%{transform:rotateY(14deg) rotateX(5deg)}
+		75%{transform:rotateY(-10deg) rotateX(-3deg)}
 	}
 
-	.planet-3::after {
-		content: '';
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 120%;
-		height: 20%;
-		background: rgba(138, 43, 226, 0.15);
-		border-radius: 50%;
-		transform: translate(-50%, -50%) rotateX(75deg);
-		box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+	/* -- 头盔球体 -- */
+	.a3d-helmet {
+		position: absolute; width: 52px; height: 56px; left: 50%; top: 0; transform: translateX(-50%) translateZ(8px);
+		background: radial-gradient(ellipse at 38% 32%, #fff, #e8eaef 25%, #c8cdd5 55%, #9ea3ab 85%);
+		border-radius: 52% 52% 44% 44%;
+		box-shadow: inset -6px -5px 15px rgba(0,0,0,.3), inset 4px 4px 10px rgba(255,255,255,.5), 0 0 25px rgba(180,210,255,.35);
+		z-index: 20;
+	}
+	.a3d-visor {
+		position: absolute; width: 34px; height: 30px; left: 50%; top: 10px; transform: translateX(-50%) translateZ(6px);
+		background: linear-gradient(175deg, rgba(255,210,60,.92), rgba(200,145,25,.88) 35%, rgba(160,110,10,.9) 65%, rgba(80,50,5,.95));
+		border-radius: 50% 50% 38% 38%;
+		box-shadow: inset 3px 4px 6px rgba(255,230,130,.5), 0 0 12px rgba(255,180,40,.4);
+	}
+	.a3d-visor::after {
+		content:""; position:absolute; width:14px; height:9px; top:5px; left:7px;
+		background:rgba(255,255,255,.45); border-radius:50%; transform:rotate(-22deg);
 	}
 
-	@keyframes planetFloat1 {
-		0%, 100% {
-			transform: translateY(0px) translateX(0px) rotateY(0deg);
-		}
-		50% {
-			transform: translateY(-30px) translateX(20px) rotateY(10deg);
-		}
+	/* -- 颈部 -- */
+	.a3d-neck {
+		position: absolute; width: 24px; height: 12px; left: 50%; top: 54px; transform: translateX(-50%) translateZ(4px);
+		background: linear-gradient(180deg, #c8cdd5, #a0a6ae);
+		border-radius: 30%; z-index: 18;
 	}
 
-	@keyframes planetFloat2 {
-		0%, 100% {
-			transform: translateY(0px) translateX(0px) rotateY(0deg);
-		}
-		50% {
-			transform: translateY(25px) translateX(-15px) rotateY(-8deg);
-		}
+	/* -- 躯干 -- */
+	.a3d-torso {
+		position: absolute; width: 56px; height: 52px; left: 50%; top: 64px; transform: translateX(-50%) translateZ(5px);
+		background: linear-gradient(175deg, #f2f4f7, #dce0e6 35%, #e4e8ee 65%, #c4c9d1);
+		border-radius: 20px 20px 15px 15px;
+		box-shadow: inset -4px -4px 12px rgba(0,0,0,.22), inset 4px 4px 10px rgba(255,255,255,.35), 0 5px 18px rgba(0,0,0,.35);
+		z-index: 16;
+	}
+	.a3d-panel {
+		position: absolute; width: 38px; height: 32px; left: 50%; top: 10px; transform: translateX(-50%) translateZ(3px);
+		background: linear-gradient(135deg, rgba(40,70,170,.55), rgba(25,50,150,.6));
+		border-radius: 14px; border: 1.5px solid rgba(80,120,220,.4);
+		box-shadow: inset 1px 1px 5px rgba(255,255,255,.15);
 	}
 
-	@keyframes planetFloat3 {
-		0%, 100% {
-			transform: translateY(0px) translateX(0px) rotateY(0deg);
-		}
-		50% {
-			transform: translateY(-20px) translateX(-25px) rotateY(12deg);
-		}
+	/* -- 腰带 -- */
+	.a3d-belt {
+		position: absolute; width: 58px; height: 10px; left: 50%; top: 112px; transform: translateX(-50%) translateZ(6px);
+		background: linear-gradient(180deg, #9098a2, #6a727d);
+		border-radius: 5px; z-index: 15;
+		box-shadow: 0 2px 6px rgba(0,0,0,.3);
 	}
 
-	@keyframes planetRotate1 {
-		from {
-			background-position: 0% 0%;
-		}
-		to {
-			background-position: 100% 100%;
-		}
+	/* -- 背包(PLSS) -- */
+	.a3d-pack {
+		position: absolute; width: 44px; height: 55px; left: 50%; top: 62px; transform: translateX(-50%) translateZ(-14px);
+		background: linear-gradient(180deg, #c8ced5, #a8b0b8 40%, #b8c0c8 70%, #9098a0);
+		border-radius: 11px;
+		box-shadow: inset -3px -3px 10px rgba(0,0,0,.35), inset 2px 2px 5px rgba(255,255,255,.1);
+		z-index: 8;
+	}
+	.a3d-pack::before {
+		content:""; position:absolute; inset:0;
+		background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,0,0,.08) 10px, rgba(0,0,0,.08) 11px);
+		border-radius: 11px;
 	}
 
-	@keyframes planetRotate2 {
-		from {
-			filter: hue-rotate(0deg) blur(0.5px);
-		}
-		to {
-			filter: hue-rotate(360deg) blur(0.5px);
-		}
+	/* -- 手臂 -- */
+	.a3d-armL {
+		position: absolute; width: 18px; height: 45px; top: 70px; left: 6px;
+		background: linear-gradient(180deg, #e4e8ee, #ccd2d9 50%, #d8dee3);
+		border-radius: 9px 9px 7px 7px;
+		box-shadow: inset -1px -1px 5px rgba(0,0,0,.18), 1px 2px 7px rgba(0,0,0,.22);
+		transform: rotate(14deg) translateZ(2px); transform-origin: top center; z-index: 13;
+	}
+	.a3d-armR {
+		position: absolute; width: 18px; height: 45px; top: 70px; right: 6px;
+		background: linear-gradient(180deg, #e4e8ee, #ccd2d9 50%, #d8dee3);
+		border-radius: 9px 9px 7px 7px;
+		box-shadow: inset -1px -1px 5px rgba(0,0,0,.18), 1px 2px 7px rgba(0,0,0,.22);
+		transform: rotate(-14deg) translateZ(2px); transform-origin: top center; z-index: 13;
+	}
+	.a3d-glove {
+		position: absolute; width: 22px; height: 16px; bottom: -12px; left: 50%; transform: translateX(-50%) translateZ(1px);
+		background: linear-gradient(180deg, #b8c0c8, #9098a2);
+		border-radius: 55% 55% 30% 30%;
+		box-shadow: inset 0 -3px 6px rgba(0,0,0,.3);
 	}
 
-	@keyframes planetRotate3 {
-		from {
-			transform: rotate(0deg);
-		}
-		to {
-			transform: rotate(360deg);
-		}
+	/* -- 腿 -- */
+	.a3d-legL {
+		position: absolute; width: 22px; height: 52px; top: 120px; left: 20px;
+		background: linear-gradient(180deg, #dce1e7, #c4cad2 50%, #d0d6dd);
+		border-radius: 10px;
+		box-shadow: inset -1px -1px 6px rgba(0,0,0,.18), 1px 2px 8px rgba(0,0,0,.2);
+		transform: translateZ(3px); z-index: 11;
+	}
+	.a3d-legR {
+		position: absolute; width: 22px; height: 52px; top: 120px; right: 20px;
+		background: linear-gradient(180deg, #dce1e7, #c4cad2 50%, #d0d6dd);
+		border-radius: 10px;
+		box-shadow: inset -1px -1px 6px rgba(0,0,0,.18), 1px 2px 8px rgba(0,0,0,.2);
+		transform: translateZ(3px); z-index: 11;
+	}
+	.a3d-boot {
+		position: absolute; width: 26px; height: 16px; bottom: -10px; left: 50%; transform: translateX(-50%) translateZ(2px);
+		background: linear-gradient(180deg, #a0a8b0, #808890);
+		border-radius: 50% 50% 32% 32%;
+		box-shadow: 0 4px 8px rgba(0,0,0,.4);
 	}
 
-	/* 宇航员层 - 多个宇航员 */
-	.astronaut-layer {
-		position: absolute;
-		width: 100%;
-		height: 100%;
+	/* -- 软管 -- */
+	.a3d-hose {
+		position: absolute; width: 3px; height: 80px; left: 82%; top: 48px;
+		background: linear-gradient(180deg, rgba(190,195,200,.7), rgba(140,148,155,.5), rgba(185,190,195,.7));
+		border-radius: 2px; transform: rotate(28deg); z-index: 5;
+		animation: hoseWiggle 3.5s ease-in-out infinite;
+	}
+	@keyframes hoseWiggle { 0%,100%{transform:rotate(28deg)} 50%{transform:rotate(22deg)} }
+
+	@keyframes aFloat1 {
+		0%{transform:translate(0,0) rotateY(0)}
+		25%{transform:translate(calc(85vw),-90px) rotateY(180deg)}
+		50%{transform:translate(calc(80vw),45px) rotateY(360deg)}
+		75%{transform:translate(calc(38vw),-55px) rotateY(540deg)}
+		100%{transform:translate(0,0) rotateY(720deg)}
+	}
+	@keyframes aFloat2 {
+		0%{transform:translate(0,0) scale(.88) rotateY(0)}
+		33%{transform:translate(calc(-65vw),70px) scale(.93) rotateY(240deg)}
+		66%{transform:translate(calc(-55vw),-55px) scale(.85) rotateY(480deg)}
+		100%{transform:translate(0,0) scale(.88) rotateY(720deg)}
 	}
 
-	.astronaut {
-		position: absolute;
-		width: 100px;
-		height: 120px;
-		opacity: 0.8;
-		filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+	/* ====== 流星雨（canvas 逐帧绘制，铺满视口） ====== */
+	.ubg-meteors {
+		position: absolute; inset: 0;
+		width: 100%; height: 100%;
+		pointer-events: none;
+		/* 不用 translateZ，避免 perspective 缩放/裁剪；置于同容器最上层 */
+		z-index: 3;
 	}
 
-	.astronaut-1 {
-		top: 40%;
-		left: 5%;
-		animation: astronautFloat1 40s ease-in-out infinite;
-	}
-
-	.astronaut-2 {
-		top: 70%;
-		right: 10%;
-		animation: astronautFloat2 45s ease-in-out infinite;
-	}
-
-	.astronaut::before {
-		content: "👨‍🚀";
-		font-size: 80px;
-		position: absolute;
-	}
-
-	@keyframes astronautFloat1 {
-		0% {
-			transform: translate(0, 0) rotate(-5deg);
-		}
-		25% {
-			transform: translate(calc(90vw), -100px) rotate(5deg);
-		}
-		50% {
-			transform: translate(calc(85vw), 50px) rotate(-3deg);
-		}
-		75% {
-			transform: translate(calc(45vw), -50px) rotate(4deg);
-		}
-		100% {
-			transform: translate(0, 0) rotate(-5deg);
-		}
-	}
-
-	@keyframes astronautFloat2 {
-		0% {
-			transform: translate(0, 0) rotate(8deg) scale(0.9);
-		}
-		33% {
-			transform: translate(calc(-70vw), 80px) rotate(-6deg) scale(0.95);
-		}
-		66% {
-			transform: translate(calc(-60vw), -60px) rotate(7deg) scale(0.92);
-		}
-		100% {
-			transform: translate(0, 0) rotate(8deg) scale(0.9);
-		}
-	}
-
-	/* 流星层 */
-	.meteor-layer {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-	}
-
-	.meteor {
-		position: absolute;
-		width: 2px;
-		height: 80px;
-		background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(173, 216, 230, 0.6) 100%);
-		opacity: 0;
-		transform: rotate(-45deg);
-		box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-	}
-
-	.meteor-1 {
-		top: 10%;
-		right: 20%;
-		animation: meteorFall1 3s ease-in infinite;
-	}
-
-	.meteor-2 {
-		top: 30%;
-		right: 60%;
-		animation: meteorFall2 4s ease-in infinite 1.5s;
-	}
-
-	.meteor-3 {
-		top: 50%;
-		right: 80%;
-		animation: meteorFall3 3.5s ease-in infinite 2.8s;
-	}
-
-	@keyframes meteorFall1 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) rotate(-45deg);
-		}
-		10% {
-			opacity: 1;
-		}
-		90% {
-			opacity: 0.5;
-		}
-		100% {
-			opacity: 0;
-			transform: translate(-400px, 400px) rotate(-45deg);
-		}
-	}
-
-	@keyframes meteorFall2 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) rotate(-40deg);
-		}
-		10% {
-			opacity: 1;
-		}
-		90% {
-			opacity: 0.6;
-		}
-		100% {
-			opacity: 0;
-			transform: translate(-500px, 450px) rotate(-40deg);
-		}
-	}
-
-	@keyframes meteorFall3 {
-		0% {
-			opacity: 0;
-			transform: translate(0, 0) rotate(-50deg);
-		}
-		10% {
-			opacity: 1;
-		}
-		90% {
-			opacity: 0.4;
-		}
-		100% {
-			opacity: 0;
-			transform: translate(-450px, 420px) rotate(-50deg);
-		}
-	}
-
-	/* 卫星层 */
-	.satellite-layer {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-	}
-
-	.satellite {
-		position: absolute;
-		width: 60px;
-		height: 40px;
-		top: 25%;
-		left: 70%;
-		opacity: 0.7;
-		animation: satelliteOrbit 50s linear infinite;
-	}
-
-	.satellite::before {
-		content: "🛰️";
-		font-size: 40px;
-		position: absolute;
-		filter: drop-shadow(0 0 8px rgba(200, 200, 255, 0.6));
-	}
-
-	@keyframes satelliteOrbit {
-		0% {
-			transform: translate(0, 0) rotate(0deg);
-		}
-		25% {
-			transform: translate(-200px, -100px) rotate(90deg);
-		}
-		50% {
-			transform: translate(-300px, 0) rotate(180deg);
-		}
-		75% {
-			transform: translate(-200px, 100px) rotate(270deg);
-		}
-		100% {
-			transform: translate(0, 0) rotate(360deg);
-		}
-	}
-
-	/* 飞船层 */
-	.spaceship-layer {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-	}
-
-	.spaceship {
-		position: absolute;
-		width: 80px;
-		height: 60px;
-		bottom: 30%;
-		right: -100px;
-		opacity: 0.75;
-		animation: spaceshipFly 35s linear infinite;
-	}
-
-	.spaceship::before {
-		content: "🚀";
-		font-size: 60px;
-		position: absolute;
-		filter: drop-shadow(0 0 12px rgba(255, 200, 100, 0.5));
-	}
-
-	@keyframes spaceshipFly {
-		0% {
-			transform: translate(0, 0) rotate(-20deg);
-			right: -100px;
-		}
-		100% {
-			transform: translate(0, -50px) rotate(-15deg);
-			right: calc(100% + 100px);
-		}
-	}
-
-	/* 响应式调整 */
+	/* ====== 响应式 ====== */
 	@media (max-width: 768px) {
-		.planet-1 {
-			width: 80px;
-			height: 80px;
-		}
-
-		.planet-2 {
-			width: 60px;
-			height: 60px;
-		}
-
-		.planet-3 {
-			width: 40px;
-			height: 40px;
-		}
-
-		.astronaut-1,
-		.astronaut-2 {
-			width: 60px;
-			height: 72px;
-		}
-
-		.astronaut::before {
-			font-size: 50px;
-		}
-
-		.satellite {
-			width: 40px;
-			height: 30px;
-		}
-
-		.satellite::before {
-			font-size: 30px;
-		}
-
-		.spaceship {
-			width: 60px;
-			height: 45px;
-		}
-
-		.spaceship::before {
-			font-size: 45px;
-		}
-
-		.meteor {
-			height: 60px;
-		}
+		.ubg-stars { background-size: cover, 200px 200px, 180px 180px, 220px 220px, 160px 160px, 200px 200px, 180px 180px, 190px 190px, 210px 210px, 170px 170px, 200px 200px, 220px 220px, 180px 180px; }
+		.ubg-nebula { opacity: .5; }
+		.p1{width:65px;height:65px}.p2{width:50px;height:50px}.p3{width:38px;height:38px}
+		.p4{width:58px;height:58px}.p5{width:42px;height:42px}.p6{width:28px;height:28px}.p7{width:32px;height:32px}
+		.a3d{width:60px;height:120px}
+		.ubg-iss{transform:scale(.62);transform-origin:top left}
 	}
 </style>
+
+<script>
+	(function() {
+		// ====== 视差滚动 ======
+		let ticking = false;
+		const stars = document.querySelector('.ubg-stars') as HTMLElement | null;
+		const neb = document.querySelector('.ubg-nebula') as HTMLElement | null;
+		const pl = document.querySelector('.ubg-planets') as HTMLElement | null;
+		const ast = document.querySelector('.ubg-astronauts') as HTMLElement | null;
+
+		function tick() {
+			const y = window.pageYOffset;
+			if (stars) stars.style.transform = `translateZ(-250px) scale(1.2) translateY(${y * 0.08}px)`;
+			if (neb) neb.style.transform = `translateZ(-120px) scale(1.1) translateY(${y * 0.13}px)`;
+			if (pl) pl.style.transform = `translateZ(40px) translateY(${y * 0.22}px)`;
+			if (ast) ast.style.transform = `translateZ(130px) translateY(${y * 0.3}px)`;
+			ticking = false;
+		}
+
+		window.addEventListener('scroll', () => {
+			if (!ticking) { requestAnimationFrame(tick); ticking = true; }
+		}, { passive: true });
+
+		tick();
+
+		// ====== 流星雨（canvas 逐帧绘制，满屏落下）======
+		const canvas = document.querySelector('.ubg-meteors') as HTMLCanvasElement | null;
+		const ctx = canvas ? canvas.getContext('2d') : null;
+
+		if (canvas && ctx) {
+			const g = ctx;                 // 收窄类型，供闭包使用
+			const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const MAX = reduce ? 30 : 90;  // 同屏最大流星数（满屏密度）
+			const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+			let dpr = 1, W = 0, H = 0;
+
+			function resize() {
+				dpr = Math.min(window.devicePixelRatio || 1, 2);
+				W = window.innerWidth;
+				H = window.innerHeight;
+				canvas!.width = Math.floor(W * dpr);
+				canvas!.height = Math.floor(H * dpr);
+				canvas!.style.width = W + 'px';
+				canvas!.style.height = H + 'px';
+				g.setTransform(dpr, 0, 0, dpr, 0, 0);
+			}
+			resize();
+			window.addEventListener('resize', resize, { passive: true });
+
+			// 单颗流星状态
+			interface Meteor {
+				x: number; y: number;      // 头部当前位置
+				vx: number; vy: number;    // 速度（px/帧）
+				len: number;               // 拖尾长度
+				life: number; ttl: number; // 已存活 / 总寿命（帧）
+				size: number;              // 亮头半径
+				bright: number;            // 峰值亮度
+			}
+			const meteors: Meteor[] = [];
+
+			function makeMeteor(): Meteor {
+				// 方向：右上 → 左下。角度 30°~52°，速度决定 vx(负)/vy(正)
+				const angle = rand(30, 52) * Math.PI / 180;
+				const speed = rand(4, 8);            // 放慢：约原来一半
+				return {
+					// 起点覆盖满屏：横跨整宽并向右外延，纵向从屏顶上方到中下部
+					x: rand(W * 0.05, W * 1.15),
+					y: rand(-H * 0.25, H * 0.7),
+					vx: -Math.cos(angle) * speed,
+					vy: Math.sin(angle) * speed,
+					len: rand(80, 260),
+					life: 0,
+					ttl: rand(120, 220),                 // 放慢后拉长寿命，才能划完全屏
+					size: rand(1.2, 2.6),
+					bright: rand(0.6, 1),
+				};
+			}
+
+			function spawn() {
+				if (meteors.length < MAX) meteors.push(makeMeteor());
+			}
+
+			// 随机节奏：偶尔爆发，偶尔稀疏
+			let acc = 0, nextGap = rand(2, 9);
+			let running = true;
+
+			function draw() {
+				g.clearRect(0, 0, W, H);
+
+				for (let i = meteors.length - 1; i >= 0; i--) {
+					const m = meteors[i];
+					if (!m) continue;
+					m.life++;
+					m.x += m.vx;
+					m.y += m.vy;
+
+					// 淡入淡出：寿命前 15% 渐显，后 30% 渐隐
+					const p = m.life / m.ttl;
+					let alpha = m.bright;
+					if (p < 0.15) alpha *= p / 0.15;
+					else if (p > 0.7) alpha *= Math.max(0, (1 - p) / 0.3);
+
+					// 拖尾终点（反速度方向）
+					const mag = Math.hypot(m.vx, m.vy) || 1;
+					const tx = m.x - (m.vx / mag) * m.len;
+					const ty = m.y - (m.vy / mag) * m.len;
+
+					// 拖尾渐变
+					const grad = g.createLinearGradient(m.x, m.y, tx, ty);
+					grad.addColorStop(0, `rgba(255,255,255,${(0.9 * alpha).toFixed(3)})`);
+					grad.addColorStop(0.15, `rgba(210,232,255,${(0.65 * alpha).toFixed(3)})`);
+					grad.addColorStop(0.45, `rgba(150,195,245,${(0.28 * alpha).toFixed(3)})`);
+					grad.addColorStop(1, 'rgba(90,140,205,0)');
+
+					g.strokeStyle = grad;
+					g.lineWidth = 2;
+					g.lineCap = 'round';
+					g.beginPath();
+					g.moveTo(m.x, m.y);
+					g.lineTo(tx, ty);
+					g.stroke();
+
+					// 亮头（发光圆点）
+					const hg = g.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.size * 4);
+					hg.addColorStop(0, `rgba(255,255,255,${alpha.toFixed(3)})`);
+					hg.addColorStop(0.3, `rgba(255,246,214,${(0.85 * alpha).toFixed(3)})`);
+					hg.addColorStop(1, 'rgba(190,220,255,0)');
+					g.fillStyle = hg;
+					g.beginPath();
+					g.arc(m.x, m.y, m.size * 4, 0, Math.PI * 2);
+					g.fill();
+
+					// 移除：寿命耗尽或飞出屏幕
+					if (m.life >= m.ttl || m.x < -m.len || m.y > H + m.len) {
+						meteors.splice(i, 1);
+					}
+				}
+
+				// 生成调度（高密度：间隔短、爆发频繁且量大）
+				acc++;
+				if (acc >= nextGap) {
+					acc = 0;
+					nextGap = rand(2, 9);
+					const burst = Math.random() < 0.45 ? Math.floor(rand(3, 8)) : 2;
+					for (let k = 0; k < burst; k++) spawn();
+				}
+
+				if (running) requestAnimationFrame(draw);
+			}
+
+			document.addEventListener('visibilitychange', () => {
+				const wasRunning = running;
+				running = !document.hidden;
+				if (running && !wasRunning) requestAnimationFrame(draw);
+			});
+
+			requestAnimationFrame(draw);
+		}
+	})();
+</script>

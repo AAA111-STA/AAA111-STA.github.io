@@ -6,87 +6,385 @@ const meta = {
 	description: "精选天文摄影作品和宇宙影像",
 };
 
+// thumb: 用于 CSS 渲染真实感天体缩略图的类名
+// detail: 点击卡片后弹窗展示的详细介绍
 const images = [
 	{
 		title: "猎户座大星云",
-		description: "距离地球约 1,344 光年的恒星形成区域",
+		description: "距离地球约 1,344 光年的恒星形成区域，是夜空中最亮的弥漫星云，肉眼可见。",
 		category: "星云",
+		thumb: "neb-orion",
+		facts: "编号 M42 · 视星等 +4.0 · 直径约 24 光年",
+		detail:
+			"猎户座大星云位于猎户座腰带下方的「佩剑」中，是距离地球最近的大规模恒星诞生地之一。在这片由氢气和尘埃构成的云团深处，新的恒星正不断形成。中心的「猎户四边形星团」发出的强烈紫外辐射，使周围气体电离而发光。它是天文摄影最受欢迎的目标之一，用小型望远镜甚至双筒镜就能看到它朦胧的形态。",
 	},
 	{
 		title: "土星及其光环",
-		description: "卡西尼号探测器拍摄的土星壮丽景象",
+		description: "卡西尼号探测器拍摄的土星壮丽景象，光环由无数冰粒和岩石碎块组成。",
 		category: "行星",
+		thumb: "planet-saturn",
+		facts: "距日 14.3 亿公里 · 光环宽度约 28 万公里",
+		detail:
+			"土星是太阳系第二大行星，以其壮观的光环系统闻名。光环主要由水冰颗粒组成，大小从微米级尘埃到数米的冰块不等，厚度却仅约 10 米。土星拥有 140 多颗已确认的卫星，其中土卫六（泰坦）比水星还大，拥有浓厚的大气层。卡西尼号探测器在 2004–2017 年间对土星系统进行了长达 13 年的详尽观测。",
 	},
 	{
 		title: "仙女座星系",
-		description: "距离地球约 254 万光年的螺旋星系",
+		description: "距离地球约 254 万光年的螺旋星系，是距银河系最近的大型星系。",
 		category: "星系",
+		thumb: "galaxy-andromeda",
+		facts: "编号 M31 · 直径约 22 万光年 · 正与银河系接近",
+		detail:
+			"仙女座星系（M31）是本星系群中最大的成员，包含约一万亿颗恒星，规模远超银河系。它正以约每秒 110 公里的速度向银河系靠近，预计约 45 亿年后两者将碰撞并合，形成一个新的巨椭圆星系。在光污染较少的夜空中，它是肉眼可见的最遥远天体，看起来像一小片模糊的光斑。",
 	},
 	{
 		title: "月球表面",
-		description: "高清月球环形山和月海细节",
+		description: "高清月球环形山和月海细节，展现数十亿年陨石撞击留下的痕迹。",
 		category: "月球",
+		thumb: "moon-surface",
+		facts: "平均距地 38.4 万公里 · 直径 3,474 公里",
+		detail:
+			"月球是地球唯一的天然卫星。表面遍布的环形山，是数十亿年间陨石与小行星撞击留下的疤痕；而颜色较深的「月海」则是古代火山活动喷出的玄武岩平原。由于潮汐锁定，月球始终以同一面朝向地球。观测月球的最佳时机并非满月，而是月相的「明暗界线」附近——此处的低角度阳光会拉长阴影，让环形山的立体细节更为清晰。",
 	},
 	{
 		title: "英仙座流星雨",
-		description: "2024 年英仙座流星雨峰值夜晚",
+		description: "每年 8 月的英仙座流星雨峰值夜晚，源自斯威夫特-塔特尔彗星的尘埃。",
 		category: "流星",
+		thumb: "meteor-shower",
+		facts: "峰值天顶流量约 100/小时 · 辐射点在英仙座",
+		detail:
+			"英仙座流星雨是北半球每年最受期待的流星雨之一，峰值出现在 8 月 12–13 日前后。它来自斯威夫特-塔特尔彗星遗留的尘埃带——当地球每年穿过这条尘埃带时，微小颗粒以约 59 km/s 的速度冲入大气层燃烧，形成流星。观测时无需任何设备，找一处黑暗、开阔、避开月光的地方仰望即可，火流星比例较高是它的一大特色。",
 	},
 	{
 		title: "木星大红斑",
-		description: "持续数百年的巨大风暴系统",
+		description: "持续数百年的巨大反气旋风暴，直径超过地球，是太阳系最大的风暴系统。",
 		category: "行星",
+		thumb: "planet-jupiter",
+		facts: "风暴直径约 1.6 万公里 · 风速超 400 公里/小时",
+		detail:
+			"大红斑是木星南半球一个持续了至少 350 年的巨型反气旋风暴，其宽度足以容纳一个多地球。风暴边缘的风速超过每小时 400 公里。近几十年的观测显示，大红斑正在缓慢缩小，形状也从椭圆逐渐趋于圆形，但其成因和红色色素的确切来源至今仍是未解之谜。木星表面明暗交替的条纹，则是不同纬度气流带的体现。",
+	},
+	{
+		title: "蟹状星云",
+		description: "公元 1054 年超新星爆发的遗迹，中心是一颗高速自转的中子星（脉冲星）。",
+		category: "星云",
+		thumb: "neb-crab",
+		facts: "编号 M1 · 距离约 6,500 光年 · 仍在膨胀",
+		detail:
+			"蟹状星云（M1）是公元 1054 年一颗超新星爆发的遗迹，这次爆发曾被中国宋代天文学家详细记录为「天关客星」，白昼可见持续 23 天。星云中心是一颗直径仅约 20 公里的中子星，每秒自转约 30 次，像宇宙灯塔一样规律地发出脉冲信号，是人类发现的第一批脉冲星之一。星云至今仍在以约每秒 1,500 公里的速度向外膨胀。",
+	},
+	{
+		title: "涡状星系",
+		description: "经典的正面旋涡星系，清晰的旋臂结构和伴星系构成壮观的相互作用系统。",
+		category: "星系",
+		thumb: "galaxy-whirlpool",
+		facts: "编号 M51 · 距离约 2,300 万光年",
+		detail:
+			"涡状星系（M51）是最著名的旋涡星系之一，因其近乎完美的正面朝向，旋臂结构清晰可辨。它与旁边的伴星系 NGC 5195 正在发生引力相互作用——正是这种潮汐拉扯，激发了旋臂中大量新恒星的形成，让旋臂显得格外明亮。它也是历史上第一个被辨认出具有旋涡结构的星系（1845 年）。",
+	},
+	{
+		title: "火星地表",
+		description: "红色星球的铁锈色荒漠、极地冰冠与巨大峡谷，是人类深空探索的重点目标。",
+		category: "行星",
+		thumb: "planet-mars",
+		facts: "距日 2.28 亿公里 · 一天约 24.6 小时",
+		detail:
+			"火星表面呈现独特的红色，源于土壤中丰富的氧化铁（铁锈）。它拥有太阳系最高的火山——奥林匹斯山（高约 22 公里），以及绵延数千公里的水手号峡谷。两极存在由水冰和干冰构成的极冠，会随季节消长。大量证据表明火星曾有液态水流动，因此它一直是搜寻地外生命痕迹和未来载人探索的首要目标。",
 	},
 ];
+
+const categories = ["全部", "星云", "星系", "行星", "月球", "流星"];
 ---
 
 <PageLayout meta={{ title: meta.title, description: meta.description }}>
 	<div class="space-y-8">
-		<section class="animate">
-			<h1 class="text-4xl font-bold mb-4">🌌 星空图库</h1>
+		<section>
+			<h1 class="title mb-4 text-4xl font-bold">🌌 星空图库</h1>
 			<p class="text-lg opacity-80">
-				收录来自世界各地天文爱好者和专业望远镜的精彩宇宙影像。
+				收录来自世界各地天文爱好者和专业望远镜的精彩宇宙影像。点击分类可筛选，点击卡片查看详情。
 			</p>
 		</section>
 
-		<section class="animate">
-			<div class="flex gap-2 mb-6 flex-wrap">
-				<button class="px-4 py-2 rounded-full bg-accent text-white">全部</button>
-				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">星云</button>
-				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">星系</button>
-				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">行星</button>
-				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">月球</button>
-				<button class="px-4 py-2 rounded-full bg-accent/20 hover:bg-accent/40 transition-all">流星</button>
+		<section>
+			<div id="gallery-filters" class="mb-6 flex flex-wrap gap-2">
+				{
+					categories.map((cat, i) => (
+						<button
+							class="gallery-filter rounded-full px-4 py-2 text-sm transition-all data-[active=true]:bg-accent data-[active=true]:text-white data-[active=false]:bg-accent/20 data-[active=false]:hover:bg-accent/40"
+							data-active={i === 0 ? "true" : "false"}
+							data-cat={cat}
+							type="button"
+						>
+							{cat}
+						</button>
+					))
+				}
 			</div>
 
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-				{images.map((image) => (
-					<div class="group cursor-pointer">
-						<div class="relative aspect-video bg-accent/10 rounded-lg overflow-hidden border border-accent/20 hover:border-accent/50 transition-all duration-300">
-							<div class="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-blue-900/30 group-hover:opacity-80 transition-opacity"></div>
-							<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-								<span class="text-xs px-2 py-1 rounded-full bg-accent/80 text-white mb-2 inline-block">
-									{image.category}
+			<div class="grid grid-cols-1 gap-6 md:grid-cols-2" id="gallery-grid">
+				{
+					images.map((image) => (
+						<article
+							class="gallery-card group cursor-pointer"
+							data-cat={image.category}
+							data-title={image.title}
+							data-thumb={image.thumb}
+							data-facts={image.facts}
+							data-detail={image.detail}
+							tabindex="0"
+							role="button"
+							aria-label={`查看 ${image.title} 详情`}
+						>
+							<div class="relative aspect-video overflow-hidden rounded-lg border border-accent/20 transition-all duration-300 hover:border-accent/50 group-focus-visible:border-accent">
+								<div class={`thumb ${image.thumb} absolute inset-0 transition-transform duration-300 group-hover:scale-105`} />
+								<div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent" />
+								<div class="absolute right-0 bottom-0 left-0 p-4">
+									<span class="mb-2 inline-block rounded-full bg-accent/80 px-2 py-1 text-xs text-white">
+										{image.category}
+									</span>
+									<h3 class="text-lg font-semibold text-white">{image.title}</h3>
+									<p class="mt-1 text-sm text-white/80">{image.description}</p>
+									<p class="mt-2 text-xs text-white/60">{image.facts}</p>
+								</div>
+								<span class="absolute top-3 right-3 rounded-full bg-black/50 px-2 py-1 text-xs text-white/90 opacity-0 transition-opacity group-hover:opacity-100">
+									点击查看详情
 								</span>
-								<h3 class="text-lg font-semibold">{image.title}</h3>
-								<p class="text-sm opacity-80">{image.description}</p>
 							</div>
-						</div>
-					</div>
-				))}
+						</article>
+					))
+				}
 			</div>
+
+			<p class="mt-4 text-sm text-muted" id="gallery-empty" hidden>该分类下暂无影像。</p>
 		</section>
 
-		<section class="animate">
-			<div class="p-6 rounded-lg bg-accent/10 border border-accent/20">
-				<h2 class="text-xl font-semibold mb-3">📸 投稿您的作品</h2>
-				<p class="opacity-80 mb-4">
+		<!-- 详情弹窗 -->
+		<div
+			id="gallery-modal"
+			class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="modal-title"
+		>
+			<div class="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-accent/30 bg-global-bg shadow-2xl">
+				<button
+					id="modal-close"
+					class="absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-xl text-white transition-colors hover:bg-black/70"
+					type="button"
+					aria-label="关闭"
+				>
+					×
+				</button>
+				<div id="modal-thumb" class="thumb aspect-video w-full rounded-t-xl"></div>
+				<div class="p-6">
+					<span
+						id="modal-cat"
+						class="mb-2 inline-block rounded-full bg-accent/80 px-2 py-1 text-xs text-white"
+					></span>
+					<h2 id="modal-title" class="mb-2 text-2xl font-bold"></h2>
+					<p id="modal-facts" class="mb-4 text-sm text-accent"></p>
+					<p id="modal-detail" class="text-sm leading-relaxed opacity-90"></p>
+				</div>
+			</div>
+		</div>
+
+		<section>
+			<div class="rounded-lg border border-accent/20 bg-accent/10 p-6">
+				<h2 class="mb-3 text-xl font-semibold">📸 投稿您的作品</h2>
+				<p class="mb-4 opacity-80">
 					如果您有精彩的天文摄影作品，欢迎投稿到我们的图库！
 				</p>
-				<a href="mailto:submit@universe.dev" class="text-accent hover:underline">
+				<a class="text-accent hover:underline" href="mailto:submit@universe.dev">
 					立即投稿 →
 				</a>
 			</div>
 		</section>
 	</div>
 </PageLayout>
+
+<style>
+	/* ====== CSS 渲染的天体缩略图 ====== */
+	.thumb { background-color: #05060f; }
+
+	/* 星云：猎户座（紫红辉光 + 星点） */
+	.neb-orion {
+		background:
+			radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+			radial-gradient(1.5px 1.5px at 70% 60%, #fff, transparent),
+			radial-gradient(2px 2px at 45% 75%, #ffe, transparent),
+			radial-gradient(ellipse at 40% 45%, rgba(255,120,160,.55), transparent 55%),
+			radial-gradient(ellipse at 62% 55%, rgba(130,110,255,.5), transparent 60%),
+			radial-gradient(circle at 50% 50%, #1a1030, #08040f 80%);
+	}
+	/* 星云：蟹状（青绿丝状） */
+	.neb-crab {
+		background:
+			radial-gradient(1.5px 1.5px at 30% 40%, #fff, transparent),
+			radial-gradient(2px 2px at 65% 55%, #fff, transparent),
+			radial-gradient(ellipse at 50% 50%, rgba(120,230,180,.5), transparent 55%),
+			radial-gradient(ellipse at 55% 45%, rgba(255,180,90,.4), transparent 50%),
+			radial-gradient(circle at 50% 50%, #10241c, #05060f 82%);
+	}
+	/* 行星：土星（沙金 + 光环） */
+	.planet-saturn { background: radial-gradient(circle at 50% 46%, #0a0c18 0 60%, transparent 61%), #05060f; position: relative; }
+	.planet-saturn::before {
+		content:''; position:absolute; top:46%; left:50%; width:64%; height:64%;
+		transform:translate(-50%,-50%);
+		border-radius:50%;
+		background:
+			radial-gradient(circle at 34% 30%, rgba(255,255,255,.25), transparent 42%),
+			repeating-linear-gradient(3deg, #f1e2be 0, #e5cf9c 5px, #d3b578 10px, #ecd8ab 16px, #ddbf88 22px);
+		box-shadow:inset -14px -12px 26px rgba(0,0,0,.5), 0 0 30px rgba(214,180,120,.4);
+	}
+	.planet-saturn::after {
+		content:''; position:absolute; top:46%; left:50%; width:118%; height:38%;
+		transform:translate(-50%,-50%) rotateX(72deg);
+		border-radius:50%;
+		background:radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(225,205,165,.75) 46%, rgba(180,152,108,.5) 52%, transparent 56%);
+	}
+	/* 行星：木星（条纹 + 大红斑） */
+	.planet-jupiter { background:#05060f; position:relative; }
+	.planet-jupiter::before {
+		content:''; position:absolute; top:50%; left:50%; width:70%; height:70%;
+		transform:translate(-50%,-50%); border-radius:50%;
+		background:
+			radial-gradient(circle at 30% 25%, rgba(255,255,255,.28), transparent 42%),
+			repeating-linear-gradient(6deg, #e9d6b4 0, #dcc196 5px, #c99d6b 10px, #b3824f 15px, #cda874 20px, #e4cfa6 26px);
+		box-shadow:inset -16px -14px 28px rgba(0,0,0,.55), 0 0 28px rgba(244,164,96,.4);
+	}
+	.planet-jupiter::after {
+		content:''; position:absolute; top:58%; left:40%; width:16%; height:11%;
+		background:radial-gradient(ellipse at 45% 40%, #d1543b, #a5301f 60%); border-radius:50%;
+		transform:rotate(-10deg);
+	}
+	/* 行星：火星（铁锈 + 极冠） */
+	.planet-mars { background:#05060f; position:relative; }
+	.planet-mars::before {
+		content:''; position:absolute; top:50%; left:50%; width:62%; height:62%;
+		transform:translate(-50%,-50%); border-radius:50%;
+		background:
+			radial-gradient(circle at 50% 12%, rgba(255,255,255,.85) 0 5%, transparent 12%),
+			radial-gradient(circle at 58% 42%, rgba(0,0,0,.14) 0 5px, transparent 6px),
+			radial-gradient(circle at 36% 30%, rgba(255,220,180,.35), transparent 40%),
+			radial-gradient(circle at 48% 50%, #e07b53, #c0562f 50%, #8b3a1e 80%);
+		box-shadow:inset -12px -10px 22px rgba(0,0,0,.5), 0 0 24px rgba(210,90,50,.4);
+	}
+	/* 星系：仙女座（旋涡盘面） */
+	.galaxy-andromeda {
+		background:
+			radial-gradient(1.5px 1.5px at 25% 30%, #fff, transparent),
+			radial-gradient(2px 2px at 75% 70%, #fff, transparent),
+			radial-gradient(ellipse at 50% 50%, rgba(255,240,210,.9) 0%, rgba(220,200,255,.45) 18%, rgba(120,130,220,.28) 40%, transparent 62%),
+			radial-gradient(circle at 50% 50%, #0a0a1a, #05060f 85%);
+	}
+	/* 星系：涡状（正面旋臂） */
+	.galaxy-whirlpool {
+		background:
+			radial-gradient(1.5px 1.5px at 40% 35%, #fff, transparent),
+			radial-gradient(2px 2px at 60% 62%, #fff, transparent),
+			conic-gradient(from 0deg at 50% 50%, rgba(150,180,255,.35), transparent 25%, rgba(255,220,190,.3) 50%, transparent 75%, rgba(150,180,255,.35)),
+			radial-gradient(circle at 50% 50%, rgba(255,245,220,.95) 0%, transparent 22%),
+			radial-gradient(circle at 50% 50%, #0a0a1a, #05060f 85%);
+	}
+	/* 月球（灰白 + 环形山） */
+	.moon-surface { background:#05060f; position:relative; }
+	.moon-surface::before {
+		content:''; position:absolute; top:50%; left:50%; width:66%; height:66%;
+		transform:translate(-50%,-50%); border-radius:50%;
+		background:
+			radial-gradient(circle at 62% 34%, rgba(0,0,0,.16) 0 4px, transparent 5px),
+			radial-gradient(circle at 40% 60%, rgba(0,0,0,.18) 0 7px, transparent 8px),
+			radial-gradient(circle at 70% 66%, rgba(0,0,0,.13) 0 3px, transparent 4px),
+			radial-gradient(circle at 36% 30%, rgba(255,255,255,.35), transparent 42%),
+			radial-gradient(circle at 47% 47%, #e0e0e0, #b6b6b6 52%, #8a8a8a 82%);
+		box-shadow:inset -12px -10px 20px rgba(0,0,0,.5), 0 0 22px rgba(200,200,200,.35);
+	}
+	/* 流星雨（暗天 + 数条流星） */
+	.meteor-shower {
+		background:
+			radial-gradient(1.5px 1.5px at 15% 20%, #fff, transparent),
+			radial-gradient(1.5px 1.5px at 80% 30%, #fff, transparent),
+			radial-gradient(2px 2px at 55% 65%, #fff, transparent),
+			radial-gradient(1px 1px at 35% 80%, #fff, transparent),
+			linear-gradient(135deg, transparent 40%, rgba(255,255,255,.6) 42%, transparent 44%),
+			linear-gradient(135deg, transparent 60%, rgba(255,255,255,.5) 62%, transparent 63%),
+			radial-gradient(circle at 50% 40%, #0d1230, #05060f 85%);
+	}
+</style>
+
+<script>
+	const buttons = document.querySelectorAll<HTMLButtonElement>(".gallery-filter");
+	const cards = document.querySelectorAll<HTMLElement>(".gallery-card");
+	const empty = document.getElementById("gallery-empty");
+
+	// ====== 分类过滤 ======
+	function applyFilter(cat: string) {
+		let visible = 0;
+		cards.forEach((card) => {
+			const match = cat === "全部" || card.dataset.cat === cat;
+			card.style.display = match ? "" : "none";
+			if (match) visible++;
+		});
+		if (empty) empty.hidden = visible !== 0;
+	}
+
+	buttons.forEach((btn) => {
+		btn.addEventListener("click", () => {
+			buttons.forEach((b) => b.setAttribute("data-active", "false"));
+			btn.setAttribute("data-active", "true");
+			applyFilter(btn.dataset.cat || "全部");
+		});
+	});
+
+	// ====== 点击卡片打开详情弹窗 ======
+	const modal = document.getElementById("gallery-modal");
+	const modalThumb = document.getElementById("modal-thumb");
+	const modalCat = document.getElementById("modal-cat");
+	const modalTitle = document.getElementById("modal-title");
+	const modalFacts = document.getElementById("modal-facts");
+	const modalDetail = document.getElementById("modal-detail");
+	const modalClose = document.getElementById("modal-close");
+	let lastFocused: HTMLElement | null = null;
+
+	function openModal(card: HTMLElement) {
+		if (!modal || !modalThumb) return;
+		lastFocused = card;
+		// 复用卡片的 thumb 类名渲染大图
+		modalThumb.className = `thumb ${card.dataset.thumb ?? ""} aspect-video w-full rounded-t-xl`;
+		if (modalCat) modalCat.textContent = card.dataset.cat ?? "";
+		if (modalTitle) modalTitle.textContent = card.dataset.title ?? "";
+		if (modalFacts) modalFacts.textContent = card.dataset.facts ?? "";
+		if (modalDetail) modalDetail.textContent = card.dataset.detail ?? "";
+		modal.classList.remove("hidden");
+		modal.classList.add("flex");
+		document.body.style.overflow = "hidden";
+		modalClose?.focus();
+	}
+
+	function closeModal() {
+		if (!modal) return;
+		modal.classList.add("hidden");
+		modal.classList.remove("flex");
+		document.body.style.overflow = "";
+		lastFocused?.focus();
+	}
+
+	cards.forEach((card) => {
+		card.addEventListener("click", () => openModal(card));
+		card.addEventListener("keydown", (e) => {
+			if (e.key === "Enter" || e.key === " ") {
+				e.preventDefault();
+				openModal(card);
+			}
+		});
+	});
+
+	modalClose?.addEventListener("click", closeModal);
+	// 点击背景（弹窗外）关闭
+	modal?.addEventListener("click", (e) => {
+		if (e.target === modal) closeModal();
+	});
+	// ESC 关闭
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) closeModal();
+	});
+</script>
